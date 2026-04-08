@@ -192,7 +192,7 @@ public class Main {
             }
         }while (check);
 
-
+        // aggiungere un controllo :) per le cord. Verificare se è un num o no.
         do {
             check = false;
             System.out.print("\nInserisci la coordinata X del pianeta: ");
