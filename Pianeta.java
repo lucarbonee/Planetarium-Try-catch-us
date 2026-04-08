@@ -8,7 +8,7 @@ public class Pianeta extends Corpo{
         super(id, massa, 2, coordX, coordY);
 
         // calcolo della distanza del pianeta dalla stella (centro)
-        this.distanza = Math.sqrt(Math.pow(coordX, 2) + Math.pow(coordY, 2));
+        this.distanza = Math.round(Math.sqrt(Math.pow(coordX, 2) + Math.pow(coordY, 2)) * 100.0) / 100.0;
     }
 
     public ArrayList<Luna> getLune() {

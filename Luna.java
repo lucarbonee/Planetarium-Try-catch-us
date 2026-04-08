@@ -7,7 +7,7 @@ public class Luna extends Corpo{
         this.pianeta = pianeta;
 
         // calcolo della distanza della luna dal suo pianeta
-        this.distanza = Math.sqrt(Math.pow( coordX - pianeta.coordX , 2) + Math.pow( coordY - pianeta.coordY, 2));
+        this.distanza = Math.round(Math.sqrt(Math.pow( coordX - pianeta.coordX , 2) + Math.pow( coordY - pianeta.coordY, 2)) * 100.0 ) / 100.0;
     }
 
 }
