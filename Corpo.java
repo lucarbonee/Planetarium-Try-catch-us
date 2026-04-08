@@ -8,7 +8,7 @@ public abstract class Corpo {
         this.massa = massa;
         this.coordX = coordX;
         this.coordY = coordY;
-        this.distanza = Math.sqrt(Math.pow(distanza, 2) + Math.pow(grado, 2));
+        this.distanza = Math.sqrt(Math.pow(coordX, 2) + Math.pow(coordY, 2));
     }
 
     public String getId() {
