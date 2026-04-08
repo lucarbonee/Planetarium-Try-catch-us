@@ -1,5 +1,5 @@
 # Planetarium 
-Realizzato da _"Try-catch us"_
+Realizzato da _"Try-catch us"_ ---> _Mattia Cappa, Danis Halilovic, Luca Carbone_ 
 
 ## 1) Caratteristiche d'implementazione
 
