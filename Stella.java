@@ -11,4 +11,10 @@ public class Stella extends Corpo {
     public ArrayList<Pianeta> getPianeti() {
         return pianeti;
     }
+
+    public boolean aggiungiPianeta(Pianeta pianeta){
+        // se il pianeta non collide con un'altro può essere aggiunto sennò no
+        this.pianeti.add(pianeta);
+        return true;
+    }
 }

@@ -5,33 +5,42 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // variabile di controllo
-        boolean check = true;
-
         // Input dell'utente
         Scanner scanner = new Scanner(System.in);
         String UserInput;
 
         // Punto di riferimento del sistema stellare (Stella)
         Stella stella = null;
-        System.out.println("\nPrima di tutto dobbiamo andare a creare la STELLA attorno alla quale orbitano tutti i nostri pianeti: ");
 
-        while (check) {
+        // Sout di formattazione
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        System.out.println("Benvenuto in Planetarium!!!");
+        System.out.println("\nPrima di tutto dobbiamo andare a creare la STELLA attorno alla quale orbitano tutti i tuoi pianeti: ");
+
+        while (stella==null ) {
             try {
                 System.out.print("\nInserisci il nome della stella: ");
                 String id = scanner.nextLine();
+
                 System.out.print("\nInserisci la massa della stella: ");
                 int massa = Integer.parseInt(scanner.nextLine());
+
                 stella = new Stella(id, massa);
 
-                check = false;
             } catch (Exception e) {
                 System.out.println("\n !!!!!!!!! Inserisci dei valori adeguati !!!!!!!!!");
             }
         }
 
-
-
+        for(int i=0; i<100; i++){
+            System.out.println();
+        }
+        System.out.println("Congratulazioni!! hai fatto il primo passo per creare il tuo fantastico sistema stellare ");
+        pulisciConsole();
 
         // Main loop
         stampaMenu();
@@ -55,7 +64,7 @@ public class Main {
                     break;
                 }
                 case("esci"):{
-                    System.out.println("Ciao bello :)");
+                    System.out.println("Grazie di aver utilizzato Planetarium!!");
                     break;
                 }
                 default:{
@@ -123,6 +132,7 @@ public class Main {
         System.out.println("-corpo -> rimuovi pianeta/luna");
         System.out.println("cerca  -> cerca un determinato corpo");
         System.out.println("//////////////////");
+        System.out.println();
     }
 
     // Aggiungi corpo
@@ -163,14 +173,13 @@ public class Main {
 
     }
 
-    private static void aggiungiPianeta(Stella s) {
-        boolean check = false;
+    private static void aggiungiPianeta(Stella stella) {
+        boolean check;
+        int massa = 0, coordX, coordY;
+
         Scanner scanner = new Scanner(System.in);
         System.out.print("\nInserisci il nome del pianeta: ");
         String id = scanner.nextLine();
-        int massa = 0;
-        int coordX;
-        int coordY;
 
         do {
             try {
@@ -196,20 +205,20 @@ public class Main {
             }
         }while (check);
 
-        s.pianeti.add(new Pianeta(id, massa, coordX, coordY));
+        stella.aggiungiPianeta(new Pianeta(id, massa, coordX, coordY));
 
         System.out.println("pianeta aggiunto");
     }
 
     private static void aggiungiLuna() {
 
-
-
         System.out.println("luna aggiunta");
     }
 
-
+    // TODO
+    // Controllo aggiunta pianeta
+    // Aggiunta luna
     // Rimuovi corpo
-
+    // Cerca corpo
 }
 
