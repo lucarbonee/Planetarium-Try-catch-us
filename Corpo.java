@@ -1,14 +1,14 @@
 public abstract class Corpo {
     String id;
-    int massa = 0, grado, coordX, coordY;
-    double distanza;
+    int massa, grado, coordX, coordY;
+    double distanza=0;
 
     protected Corpo(String id, int massa, int grado, int coordX, int coordY) {
         this.id = id;
         this.massa = massa;
         this.coordX = coordX;
         this.coordY = coordY;
-        this.distanza = Math.sqrt(Math.pow(coordX, 2) + Math.pow(coordY, 2));
+
     }
 
     public String getId() {
