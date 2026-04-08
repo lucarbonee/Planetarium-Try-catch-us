@@ -111,6 +111,8 @@ public class Main {
 
     }
 
+
+    // Da vedere -dani
     // Gestore leggibilità console
     private static void pulisciConsole(){
         System.out.println();
@@ -175,7 +177,7 @@ public class Main {
 
     private static void aggiungiPianeta(Stella stella) {
         boolean check;
-        int massa = 0, coordX, coordY;
+        int massa = 0, coordX = 0, coordY= 0;
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("\nInserisci il nome del pianeta: ");
@@ -192,22 +194,37 @@ public class Main {
             }
         }while (check);
 
-        // aggiungere un controllo :) per le cord. Verificare se è un num o no.
+        // Controllo aggiunto!
         do {
             check = false;
-            System.out.print("\nInserisci la coordinata X del pianeta: ");
-            coordX = Integer.parseInt(scanner.nextLine());
-            System.out.print("\nInserisci la coordinata Y del pianeta: ");
-            coordY = Integer.parseInt(scanner.nextLine());
-            if((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100 )) {
-                System.out.println("\n !!!! inserisci dei valori compresi tra -100 e 100 !!!!");
+            try {
+                System.out.print("\nInserisci la coordinata X del pianeta: ");
+                coordX = Integer.parseInt(scanner.nextLine());
+                System.out.print("\nInserisci la coordinata Y del pianeta: ");
+                coordY = Integer.parseInt(scanner.nextLine());
+                if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
+                    System.out.println("\n !!!! inserisci dei valori compresi tra -100 e 100 !!!!");
+                    check = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
                 check = true;
             }
-        }while (check);
+        } while (check);
 
-        stella.aggiungiPianeta(new Pianeta(id, massa, coordX, coordY));
+        // Dopo aver modificato la classe Stella ho fatto modifiche qui
 
-        System.out.println("pianeta aggiunto");
+        Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY);
+
+        boolean aggiuntoConSuccesso = stella.aggiungiPianeta(pianeta);
+
+        if (aggiuntoConSuccesso == true){
+            System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
+            System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
+        } else {
+
+            System.out.println("\n Orbita già occupata ");
+        }
     }
 
     private static void aggiungiLuna() {
