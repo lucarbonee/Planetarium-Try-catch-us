@@ -1,2 +1,2 @@
-public class Corpo {
+public abstract class Corpo {
 }
