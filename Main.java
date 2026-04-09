@@ -23,6 +23,8 @@ public class Main {
 
         while (stella==null ) {
             try {
+
+
                 System.out.print("\nInserisci il nome della stella: ");
                 String id = scanner.nextLine();
 
@@ -40,7 +42,7 @@ public class Main {
             System.out.println();
         }
         System.out.println("Congratulazioni!! hai fatto il primo passo per creare il tuo fantastico sistema stellare ");
-        pulisciConsole();
+        pulisciConsole(scanner);
 
         // Main loop
         stampaMenu();
@@ -51,16 +53,22 @@ public class Main {
             switch (UserInput.toLowerCase()){
                 case("menu"):{
                     stampaMenu();
-                    pulisciConsole();
+                    //pulisciConsole(scanner);
                     break;
                 }
                 case("+corpo"):{
-                    aggiungiCorpo(stella);
-                    pulisciConsole();
+                    aggiungiCorpo(stella, scanner);
+                    pulisciConsole(scanner);
                     break;
                 }
                 case("-corpo"):{
 
+                    break;
+                }
+                case("cerca"):{
+                    cercaCorpo(stella, scanner);
+                    pulisciConsole(scanner);
+                    stampaMenu(); // ho provato a mettere solo per vedere comne va
                     break;
                 }
                 case("esci"):{
@@ -69,7 +77,7 @@ public class Main {
                 }
                 default:{
                     System.out.print("Comando non trovato :(");
-                    pulisciConsole();
+                    pulisciConsole(scanner);
                 }
             }
 
@@ -114,11 +122,10 @@ public class Main {
 
     // Da vedere -dani
     // Gestore leggibilità console
-    private static void pulisciConsole(){
+    private static void pulisciConsole(Scanner scanner){
         System.out.println();
         System.out.print("Premi invio per continuare ");
-        Scanner s = new Scanner(System.in);
-        s.nextLine();
+        scanner.nextLine();
         for(int i=0; i<100; i++){
             System.out.println();
         }
@@ -138,8 +145,8 @@ public class Main {
     }
 
     // Aggiungi corpo
-    private static void aggiungiCorpo(Stella stella){
-        Scanner scanner = new Scanner(System.in);
+    private static void aggiungiCorpo(Stella stella, Scanner scanner){
+        // Scanner scanner = new Scanner(System.in);
         System.out.println("""
                 pianeta  -> aggiungi un pianeta
                 luna     -> aggiungi una luna
@@ -152,13 +159,13 @@ public class Main {
             switch (UserInput.toLowerCase()){
                 case "pianeta":{
                     check = false;
-                    aggiungiPianeta(stella);
+                    aggiungiPianeta(stella, scanner);
                     break;
                 }
 
                 case "luna":{
                     check = false;
-                    aggiungiLuna(stella);
+                    aggiungiLuna(stella, scanner);
                     break;
                 }
 
@@ -175,11 +182,10 @@ public class Main {
 
     }
 
-    private static void aggiungiPianeta(Stella stella) {
+    private static void aggiungiPianeta(Stella stella, Scanner scanner) {
         boolean check;
         int massa = 0, coordX = 0, coordY= 0;
 
-        Scanner scanner = new Scanner(System.in);
         System.out.print("\nInserisci il nome del pianeta: ");
         String id = scanner.nextLine();
 
@@ -227,8 +233,8 @@ public class Main {
         }
     }
 
-    private static void aggiungiLuna(Stella stella) {
-        Scanner scanner = new Scanner(System.in);
+    private static void aggiungiLuna(Stella stella, Scanner scanner) {
+        //Scanner scanner = new Scanner(System.in);
 
         System.out.print("\nInserisci il nome del pianeta a cui vuoi aggiungere la luna: ");
         String nomePianetaCercato = scanner.nextLine();
@@ -300,5 +306,66 @@ public class Main {
     // TODO
     // Rimuovi corpo
     // Cerca corpo
+
+    private static void cercaCorpo(Stella stella, Scanner scanner){
+        // Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\n Inserire il nome del corpo da cercare: ");
+        String nomeCercato = scanner.nextLine();
+
+        System.out.println("\n Ricerca in corso di: " + nomeCercato );
+
+        // vado a controllare la stella
+
+        if (stella.getId().equalsIgnoreCase(nomeCercato)){
+            System.out.println(" Corpo trovato,  e' la stella del sistema.");
+            System.out.println("- Nome: " + stella.getId());
+            System.out.println("- Massa: " + stella.getMassa());
+            int[] coordinate = stella.getCoord();
+            System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
+
+            return;
+        }
+
+        // vado a controllare i pianeti e le lune
+
+        for (int i = 0; i < stella.getPianeti().size(); i++){
+            Pianeta pianetaAttuale = stella.getPianeti().get(i);
+
+            // voglio vedere se è il pianta che cerchiamo
+            if (pianetaAttuale.getId().equalsIgnoreCase(nomeCercato)){
+                System.out.println("\n Trovato e' un Pianeta.");
+                System.out.println("- Nome: " + pianetaAttuale.getId());
+                System.out.println("- Massa: " + pianetaAttuale.getMassa());
+                int[] coordinate = pianetaAttuale.getCoord();
+                System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
+                System.out.println("- Distanza dalla Stella: " + pianetaAttuale.getDistanza());
+
+                return;
+            }
+
+            for (int j = 0; j < pianetaAttuale.getLune().size(); j++){
+                Luna lunaAttuale = pianetaAttuale.getLune().get(j);
+
+                if (lunaAttuale.getId().equalsIgnoreCase(nomeCercato)) {
+                    System.out.println("Trovato! È una Luna.");
+                    System.out.println("- Nome: " + lunaAttuale.getId());
+                    System.out.println("- Orbita attorno a: " + pianetaAttuale.getId());
+                    System.out.println("- Massa: " + lunaAttuale.getMassa());
+                    int[] coordinate = lunaAttuale.getCoord();
+                    System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
+                    System.out.println("- Distanza dal suo Pianeta: " + lunaAttuale.getDistanza());
+
+                    return;
+                }
+            }
+        }
+        // qua scriverei altro
+        System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
+
+    }
+
+
+
 }
 
