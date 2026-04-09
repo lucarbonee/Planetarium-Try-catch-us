@@ -303,8 +303,7 @@ public class Main {
         }
     }
 
-    // TODO
-    // Rimuovi corpo
+
     // Cerca corpo
 
     private static void cercaCorpo(Stella stella, Scanner scanner){
@@ -365,6 +364,8 @@ public class Main {
 
     }
 
+    // TODO
+    // Rimuovi corpo
 
 
 }
