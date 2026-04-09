@@ -10,4 +10,7 @@ public class Luna extends Corpo{
         this.distanza = Math.round(Math.sqrt(Math.pow( coordX - pianeta.coordX , 2) + Math.pow( coordY - pianeta.coordY, 2)) * 100.0 ) / 100.0;
     }
 
+    public Pianeta getPianeta() {
+        return pianeta;
+    }
 }
