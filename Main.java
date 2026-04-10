@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Scanner;
 
 // TODO funzionalita base
-// Controllo nomi vuoti pianeti
 //● Calcolo del centro di massa su richiesta, sulla base delle informazioni disponibili volta per volta. (non fatto perchè serve discutere assieme riguardo i size)
 
 // TODO funzionalità aggiuntive
@@ -21,6 +20,7 @@ public class Main {
         // Input dell'utente
         Scanner scanner = new Scanner(System.in);
         String UserInput;
+        String id="";
 
         // Punto di riferimento del sistema stellare (Stella)
         Stella stella = null;
@@ -34,8 +34,13 @@ public class Main {
         System.out.println("Benvenuto in Planetarium!!!");
         System.out.println("\nPrima di tutto dobbiamo andare a creare la STELLA attorno alla quale orbitano tutti i tuoi pianeti: ");
 
-        System.out.print("\nInserisci il nome della stella: ");
-        String id = scanner.nextLine();
+        while(id.isEmpty() || id.contains(" ") || id.contains("\t")){
+            System.out.print("\nInserisci il nome della stella: ");
+            id = scanner.nextLine();
+            if(id.isEmpty()  || id.contains(" ") || id.contains("\t")){
+                System.out.println("Il nome della stella non può essere vuoto o contenere spazi!");
+            }
+        }
 
         while (stella == null) {
             try {
@@ -48,7 +53,7 @@ public class Main {
                     System.out.println("La massa deve essere compresa tra " + MIN + " e " + MAX);
 
             } catch (Exception e) {
-                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
+                System.out.println("\n!!! Inserisci dei valori adeguati !!!");
             }
         }
 
@@ -208,12 +213,18 @@ public class Main {
     private static void aggiungiPianeta(Stella stella, Scanner scanner) {
         boolean corretto, nuovo;
         int massa = 0, coordX = 0, coordY= 0;
-        String id;
+        String id="";
 
         do {
             nuovo = true;
-            System.out.print("\nInserisci il nome del pianeta: ");
-            id = scanner.nextLine();
+            while(id.isEmpty() || id.contains(" ") || id.contains("\t")){
+                System.out.print("\nInserisci il nome del pianeta: ");
+                id = scanner.nextLine();
+                if(id.isEmpty()  || id.contains(" ") || id.contains("\t")){
+                    System.out.println("Il nome dell pianeta non può essere vuoto o contenere spazi!");
+                }
+            }
+
             if(esiste(id, stella)){
                 System.out.println("Nome già in uso nel sistema stellare!");
                 nuovo = false;
@@ -303,14 +314,20 @@ public class Main {
                 return;
             }
 
-            String idLuna = null;
+            String idLuna = "";
             boolean nuovo;
 
             do {
                 try{
                     nuovo = true;
-                    System.out.print("\nInserisci il nome della luna: ");
-                    idLuna = scanner.nextLine();
+                    while(idLuna.isEmpty() || idLuna.contains(" ") || idLuna.contains("\t")){
+                        System.out.print("\nInserisci il nome della luna: ");
+                        idLuna = scanner.nextLine();
+                        if(idLuna.isEmpty()  || idLuna.contains(" ") || idLuna.contains("\t")){
+                            System.out.println("Il nome della luna non può essere vuoto o contenere spazi!");
+                        }
+                    }
+
                     if(esiste(idLuna, stella)){
                         System.out.println("Nome già in uso nel sistema stellare!");
                         nuovo = false;
