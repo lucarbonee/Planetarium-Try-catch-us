@@ -20,13 +20,13 @@ public class Stella extends Corpo {
         // Uso un ciclo for per fare il controllo delle orbite, facendo uno scorrimento tra i pianeti già salvati
         for (Pianeta pianetaEsistente : this.pianeti) {
 
-            // Controllo se la distanza di un pianeta appena creato è uguale a quella di uno gia esistente, in tal caso l'orbita è occupata
-            // Oppure se l'utente vuole aggiungere un pianeta in centro al sistema stellare
-            if ( (pianeta.getDistanza() == pianetaEsistente.getDistanza() ) || (pianeta.getDistanza() == 0) ) {
+            // Controllo se la distanza di un pianeta appena creato è uguale a quella di uno già esistente, in tal caso l'orbita è occupata
+            if (pianeta.getDistanza() == pianetaEsistente.getDistanza()) {
                 aggiungi = false;
                 break;
             }
         }
+
         if (aggiungi) {
             this.pianeti.add(pianeta);
         }

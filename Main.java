@@ -2,7 +2,6 @@ import java.util.Scanner;
 
 // TODO funzionalita base
 //● Calcolo del centro di massa su richiesta, sulla base delle informazioni disponibili volta per volta. (non fatto perchè serve discutere assieme riguardo i size)
-// Rimuovi corpo
 
 // TODO funzionalità aggiuntive
 // Calcolo rotta
@@ -190,7 +189,6 @@ public class Main {
 
     }
 
-    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     private static void aggiungiPianeta(Stella stella, Scanner scanner) {
         boolean check;
         int massa = 0, coordX = 0, coordY= 0;
@@ -209,7 +207,6 @@ public class Main {
             }
         }while (check);
 
-
         do {
             check = false;
             try {
@@ -221,6 +218,10 @@ public class Main {
                     System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
                     check = true;
                 }
+                if ( coordX == 0 && coordY == 0 ) {
+                    System.out.println("\n !!! Il pianeta non può essere al centro del sistema stellare !!!");
+                    check = true;
+                }
             } catch (NumberFormatException e) {
                 System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                 check = true;
@@ -229,17 +230,16 @@ public class Main {
 
         Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY);
 
-        boolean aggiuntoConSuccesso = stella.aggiungiPianeta(pianeta);
-
-        if (aggiuntoConSuccesso){
+        boolean pianetaAggiunto = stella.aggiungiPianeta(pianeta);
+        if (pianetaAggiunto){
             System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
             System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
 
         } else {
-            System.out.println("\n Orbita già occupata ");
+            System.out.println("\n orbita occupata!");
         }
     }
-    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
+
     private static void aggiungiLuna(Stella stella, Scanner scanner) {
 
         // Controllo che esistano pianeti
