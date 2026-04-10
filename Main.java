@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.Scanner;
 
 // TODO funzionalita base
+// Controllo nomi vuoti pianeti
 //● Calcolo del centro di massa su richiesta, sulla base delle informazioni disponibili volta per volta. (non fatto perchè serve discutere assieme riguardo i size)
 
 // TODO funzionalità aggiuntive
-// Calcolo rotta
 // Collisioni (parlzialmente già realizzata)
 
 public class Main {
@@ -473,14 +473,20 @@ public class Main {
                 Pianeta p = (Pianeta) c; //Downcasting
                 do{
                     System.out.println();
-                    System.out.println("Sei sicuro di voler eliminare il pianeta "+c.getId()+"?");
-                    System.out.println("Ricordati che assieme al pianeta eliminerai anche le sue lune: ");
-                    for(Luna l : p.getLune()){
-                        if(p.getLune().size()>1){
-                            System.out.print(l.getId()+", ");
-                        }
-                        else{
-                            System.out.print(l.getId());
+                    System.out.println("Sei sicuro di voler eliminare il pianeta '"+c.getId()+"' ?");
+                    if(p.getLune().isEmpty()){
+                        System.out.println("Il pianeta non possiede lune");
+                    }
+                    else{
+                        System.out.println("Ricordati che assieme al pianeta eliminerai anche le sue lune: ");
+                        System.out.print("- ");
+                        for(Luna l : p.getLune()){
+                            if(p.getLune().size()>1){
+                                System.out.print(l.getId()+", ");
+                            }
+                            else{
+                                System.out.print(l.getId());
+                            }
                         }
                     }
                     System.out.println();
@@ -491,7 +497,7 @@ public class Main {
 
                 if(userInput.equals("si")){
                     stella.getPianeti().remove(c);
-                    System.out.println("Il pianeta "+c.getId()+" e' stato rimosso con successo dal sistema stellare");
+                    System.out.println("Il pianeta '"+c.getId()+"' e' stato rimosso con successo dal sistema stellare");
                 }
                 else{
                     System.out.println("Ritorno al menu' principale");
@@ -502,7 +508,7 @@ public class Main {
                 Luna l = (Luna) c;
                 Pianeta p = l.getPianeta(); // Downcasting da corpo a luna
                 p.getLune().remove(l);
-                System.out.println("La luna "+l.getId()+" e' stata rimossa con successo dal pianeta "+p.getId());
+                System.out.println("La luna '"+l.getId()+"' e' stata rimossa con successo dal pianeta '"+p.getId()+"'");
             }
             else{
                 System.out.println("Non puoi rimuovere la stella del sistema!");
