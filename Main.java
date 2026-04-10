@@ -8,6 +8,9 @@ import java.util.Scanner;
 // Collisioni (parlzialmente già realizzata)
 
 public class Main {
+    final static int MIN = 20;
+    final static int MAX = 40;
+
 
     public static void main(String[] args) {
 
@@ -30,12 +33,15 @@ public class Main {
         System.out.print("\nInserisci il nome della stella: ");
         String id = scanner.nextLine();
 
-        while (stella==null ) {
+        while (stella == null) {
             try {
                 System.out.print("\nInserisci la massa della stella: ");
                 int massa = Integer.parseInt(scanner.nextLine());
 
-                stella = new Stella(id, massa);
+                if (massa >= MIN && massa <= MAX)
+                    stella = new Stella(id, massa);
+                else
+                    System.out.println("La massa deve essere compresa tra " + MIN + " e " + MAX);
 
             } catch (Exception e) {
                 System.out.println("\n !!! Inserisci dei valori adeguati !!!");

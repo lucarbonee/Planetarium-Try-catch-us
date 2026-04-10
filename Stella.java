@@ -12,7 +12,6 @@ public class Stella extends Corpo {
         return pianeti;
     }
 
-    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     // Se il pianeta non collide con altri può essere aggiunto, altrimenti no
     public boolean aggiungiPianeta(Pianeta pianeta){
         boolean aggiungi = true;

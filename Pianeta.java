@@ -15,7 +15,6 @@ public class Pianeta extends Corpo{
         return lune;
     }
 
-    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     public boolean aggiungiLuna(Luna luna){
         boolean aggiungi = true;
 
