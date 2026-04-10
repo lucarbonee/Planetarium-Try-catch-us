@@ -493,7 +493,7 @@ public class Main {
 
         ArrayList<String> rotta = new ArrayList<>();
         ArrayList<String> rotta1 = new ArrayList<>();
-
+        double distanza = 0;
         Corpo[] corpi = new Corpo[2];
         corpi[0] = new Corpo("a",1,1,1,1);
         corpi[1] = new Corpo("a",1,1,1,1);
@@ -509,36 +509,46 @@ public class Main {
         }
         else{
             if(((corpi[0].getGrado()==corpi[1].getGrado()) && corpi[0].getGrado()==3) && corpi[0].getInferiore()==corpi[1].getInferiore()){
-                System.out.println("La rotta tra i due pianeti e': ");
+                System.out.print("La rotta tra i due pianeti e': ");
                 System.out.println(corpi[0].getId() + " " +corpi[0].getInferiore().getId()+" "+corpi[1].getId());
+                distanza = calcolaDistanza(corpi[0],corpi[0].getInferiore()) + calcolaDistanza(corpi[0].getInferiore(),corpi[1]);
             } else if (corpi[0]==corpi[1]) {
-                System.out.println("La rotta tra i due pianeti e': ");
+                System.out.print("La rotta tra i due pianeti e': ");
                 System.out.println(corpi[0].getId());
             } else{
 
 
                 while(corpi[0]!=stella){
                     rotta.add(corpi[0].getId());
+                    distanza += calcolaDistanza(corpi[0],corpi[0].getInferiore());
                     corpi[0] = corpi[0].getInferiore();
+
                 }
 
                 rotta.add(stella.getId());
 
                 while(corpi[1]!=stella){
                     rotta1.add(corpi[1].getId());
+                    distanza += calcolaDistanza(corpi[1],corpi[1].getInferiore());
                     corpi[1] = corpi[1].getInferiore();
                 }
 
                 Collections.reverse(rotta1);
 
                 rotta.addAll(rotta1);
-                System.out.println("La rotta tra i due pianeti e': ");
+                System.out.print("La rotta tra i due pianeti e': ");
                 for(String s : rotta){
                     System.out.print(s+"    ");
                 }
+                System.out.println();
             }
+            System.out.println("La distanza totale della rotta corrisponde a: "+distanza);
         }
 
+    }
+
+    private static double calcolaDistanza(Corpo c1, Corpo c2){
+        return Math.round(Math.sqrt(Math.pow(c1.coordX-c2.coordX, 2) + Math.pow(c1.coordY-c2.coordY, 2)) * 100.0) / 100.0;
     }
 
     // Genera corpi
