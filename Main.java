@@ -1,11 +1,9 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
 // TODO funzionalita base
-//● Calcolo del centro di massa su richiesta, sulla base delle informazioni disponibili volta per volta. (non fatto perchè serve discutere assieme riguardo i size)
+// Aggiornare il readme
 
 // TODO funzionalità aggiuntive
 // Collisioni (parlzialmente già realizzata)
@@ -98,6 +96,11 @@ public class Main {
                     pulisciConsole(scanner);
                     break;
                 }
+                case("cmassa"):{
+                    calcoloCentroMassa(stella);
+                    pulisciConsole(scanner);
+                    break;
+                }
                 case("esci"):{
                     System.out.println("Grazie di aver utilizzato Planetarium!!");
                     break;
@@ -168,6 +171,7 @@ public class Main {
         System.out.println("-corpo -> rimuovi pianeta/luna");
         System.out.println("cerca  -> cerca un determinato corpo");
         System.out.println("rotta -> visualizza la rotta da un corpo all'altro");
+        System.out.println("cmassa -> calcola il centro di massa del sistema stellare");
         System.out.println("//////////////////");
         System.out.println();
     }
@@ -595,6 +599,27 @@ public class Main {
 
     }
 
+    // Calcolo centro di massa
+    private static void calcoloCentroMassa(Stella stella){
+        double sommaMasse = 0, sommaX = 0, sommaY = 0;
+        sommaMasse = stella.getMassa();
+        sommaX = stella.coordX*sommaMasse;
+        sommaY = stella.coordY*sommaMasse;
+
+        for(Pianeta p : stella.getPianeti()){
+            sommaMasse += p.getMassa();
+            sommaX += p.coordX*p.getMassa();
+            sommaY += p.coordY*p.getMassa();
+            for(Luna l : p.getLune()){
+                sommaMasse += l.getMassa();
+                sommaX += l.coordX*l.getMassa();
+                sommaY += l.coordY*l.getMassa();
+            }
+        }
+        System.out.println("Il centro di massa corrisponde alle coordinate: ("+(Math.round((sommaX/sommaMasse*1000.0))/1000.0)+","+(Math.round((sommaY/sommaMasse*1000.0))/1000.0)+")");
+    }
+
+    // Calcolo distanza tra due corpi dati
     private static double calcolaDistanza(Corpo c1, Corpo c2){
         return Math.round(Math.sqrt(Math.pow(c1.coordX-c2.coordX, 2) + Math.pow(c1.coordY-c2.coordY, 2)) * 100.0) / 100.0;
     }
@@ -627,8 +652,6 @@ public class Main {
                 }
             }
         }
-
-
 
         return esiste;
     }
