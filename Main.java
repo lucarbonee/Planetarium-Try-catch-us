@@ -196,7 +196,7 @@ public class Main {
     }
 
     private static void aggiungiPianeta(Stella stella, Scanner scanner) {
-        boolean check;
+        boolean corretto;
         int massa = 0, coordX = 0, coordY= 0;
 
         System.out.print("\nInserisci il nome del pianeta: ");
@@ -206,15 +206,21 @@ public class Main {
             try {
                 System.out.print("\nInserisci la massa del pianeta: ");
                 massa = Integer.parseInt(scanner.nextLine());
-                check = false;
+
+                if(massa >= stella.massa) {
+                    System.out.println("La massa del pianeta non può essere maggiore o uguale a quella della stella!");
+                    corretto = false;
+                } else
+                    corretto = true;
+
             }catch (Exception e){
                 System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                check = true;
+                corretto = false;
             }
-        }while (check);
+        }while (!corretto);
 
         do {
-            check = false;
+            corretto = true;
             try {
                 System.out.print("\nInserisci la coordinata X del pianeta: ");
                 coordX = Integer.parseInt(scanner.nextLine());
@@ -222,17 +228,17 @@ public class Main {
                 coordY = Integer.parseInt(scanner.nextLine());
                 if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
                     System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
-                    check = true;
+                    corretto = false;
                 }
                 if ( coordX == 0 && coordY == 0 ) {
                     System.out.println("\n !!! Il pianeta non può essere al centro del sistema stellare !!!");
-                    check = true;
+                    corretto = false;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                check = true;
+                corretto = false;
             }
-        } while (check);
+        } while (!corretto);
 
         Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY);
 
@@ -274,31 +280,39 @@ public class Main {
             }
 
             if (pianetaTrovato == null) {
-                System.out.println("\nnon trovato nel sistema stellare!");
+                System.out.println("\nNon trovato nel sistema stellare!");
                 return;
             }
 
             System.out.print("\nInserisci il nome della luna: ");
             String idLuna = scanner.nextLine();
 
-            boolean check;
+            boolean corretto;
             int massa = 0, coordX = 0, coordY = 0;
 
             // Controllo massa
             do {
                 try {
+                    corretto = true;
                     System.out.print("\nInserisci la massa della luna: ");
                     massa = Integer.parseInt(scanner.nextLine());
-                    check = false;
+                    if (massa >= pianetaTrovato.massa) {
+                        System.out.println("La massa della luna non può essere maggiore o uguale a quella del proprio centro gravitazionale, ovvero di " + pianetaTrovato.massa);
+                        corretto = false;
+                    }
+                    if (massa <= 0) {
+                        System.out.println("La massa non può essere nulla o negativa");
+                        corretto = false;
+                    }
                 }catch (Exception e){
                     System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                    check = true;
+                    corretto = false;
                 }
-            }while (check);
+            }while (!corretto);
 
             // Controllo coordinate
             do {
-                check = false;
+                corretto = true;
                 try {
                     System.out.print("\nInserisci la coordinata X della luna: ");
                     coordX = Integer.parseInt(scanner.nextLine());
@@ -306,17 +320,17 @@ public class Main {
                     coordY = Integer.parseInt(scanner.nextLine());
                     if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
                         System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
-                        check = true;
+                        corretto = false;
                     }
                     if (coordX == 0 && coordY == 0) {
                         System.out.println("\n!!! La luna non può trovarsi al centro del sistema stellare !!!");
-                        check = true;
+                        corretto = false;
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                    check = true;
+                    corretto = false;
                 }
-            } while (check);
+            } while (!corretto);
 
             Luna nuovaLuna = new Luna(idLuna, massa, coordX, coordY, pianetaTrovato);
 
@@ -359,10 +373,10 @@ public class Main {
             for (int i = 0; i < stella.getPianeti().size(); i++){
                 Pianeta pianetaAttuale = stella.getPianeti().get(i);
 
-                // voglio vedere se è il pianta che cerchiamo
+                // voglio vedere se è il pianeta che cerchiamo
                 if (pianetaAttuale.getId().equalsIgnoreCase(nomeCercato)){
                     if(execute){
-                        System.out.println("\nTrovato e' un Pianeta.");
+                        System.out.println("\nTrovato! È un Pianeta.");
                         System.out.println("- Nome: " + pianetaAttuale.getId());
                         System.out.println("- Massa: " + pianetaAttuale.getMassa());
                         int[] coordinate = pianetaAttuale.getCoord();
