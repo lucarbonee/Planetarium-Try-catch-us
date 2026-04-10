@@ -12,21 +12,24 @@ public class Stella extends Corpo {
         return pianeti;
     }
 
+    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
+    // Se il pianeta non collide con altri può essere aggiunto, altrimenti no
     public boolean aggiungiPianeta(Pianeta pianeta){
-        // se il pianeta non collide con un'altro può essere aggiunto sennò no
+        boolean aggiungi = true;
 
-        // Ho usato un ciclo for per fare il controllo delle orbite, faccendo un scorrimento tra i pianeti gia salvati
-        for (int i = 0; i< this.pianeti.size(); i++){
+        // Uso un ciclo for per fare il controllo delle orbite, facendo uno scorrimento tra i pianeti già salvati
+        for (Pianeta pianetaEsistente : this.pianeti) {
 
-            // Non giudicatemi per la nome della variabile ne parleremo haha
-            Pianeta pianetaEsistente = this.pianeti.get(i);
-
-            // poi ho pensato di controllare se la distanza di un pianta appena creato sia uguale a quella di uno gia esistente
-            if (pianeta.getDistanza() == pianetaEsistente.getDistanza()){
-                return false;
+            // Controllo se la distanza di un pianeta appena creato è uguale a quella di uno gia esistente, in tal caso l'orbita è occupata
+            // Oppure se l'utente vuole aggiungere un pianeta in centro al sistema stellare
+            if ( (pianeta.getDistanza() == pianetaEsistente.getDistanza() ) || (pianeta.getDistanza() == 0) ) {
+                aggiungi = false;
+                break;
             }
         }
-        this.pianeti.add(pianeta);
-        return true;
+        if (aggiungi) {
+            this.pianeti.add(pianeta);
+        }
+        return aggiungi;
     }
 }

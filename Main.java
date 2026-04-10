@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 // TODO funzionalita base
@@ -29,20 +28,18 @@ public class Main {
         System.out.println("Benvenuto in Planetarium!!!");
         System.out.println("\nPrima di tutto dobbiamo andare a creare la STELLA attorno alla quale orbitano tutti i tuoi pianeti: ");
 
+        System.out.print("\nInserisci il nome della stella: ");
+        String id = scanner.nextLine();
+
         while (stella==null ) {
             try {
-
-
-                System.out.print("\nInserisci il nome della stella: ");
-                String id = scanner.nextLine();
-
                 System.out.print("\nInserisci la massa della stella: ");
                 int massa = Integer.parseInt(scanner.nextLine());
 
                 stella = new Stella(id, massa);
 
             } catch (Exception e) {
-                System.out.println("\n !!!!!!!!! Inserisci dei valori adeguati !!!!!!!!!");
+                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
             }
         }
 
@@ -157,7 +154,6 @@ public class Main {
 
     // Aggiungi corpo
     private static void aggiungiCorpo(Stella stella, Scanner scanner){
-        // Scanner scanner = new Scanner(System.in);
         System.out.println("""
                 pianeta  -> aggiungi un pianeta
                 luna     -> aggiungi una luna
@@ -180,9 +176,10 @@ public class Main {
                     break;
                 }
 
-                case "indietro":
+                case "indietro": {
                     check = false;
                     break;
+                }
 
                 default:{
                     System.out.println("Comando non trovato, puoi aggiungere un pianeta o una luna, oppure tornare indietro");
@@ -193,6 +190,7 @@ public class Main {
 
     }
 
+    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     private static void aggiungiPianeta(Stella stella, Scanner scanner) {
         boolean check;
         int massa = 0, coordX = 0, coordY= 0;
@@ -206,12 +204,12 @@ public class Main {
                 massa = Integer.parseInt(scanner.nextLine());
                 check = false;
             }catch (Exception e){
-                System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
+                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                 check = true;
             }
         }while (check);
 
-        // Controllo aggiunto!
+
         do {
             check = false;
             try {
@@ -220,40 +218,39 @@ public class Main {
                 System.out.print("\nInserisci la coordinata Y del pianeta: ");
                 coordY = Integer.parseInt(scanner.nextLine());
                 if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
-                    System.out.println("\n !!!! inserisci dei valori compresi tra -100 e 100 !!!!");
+                    System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
                     check = true;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
+                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                 check = true;
             }
         } while (check);
-
-        // Dopo aver modificato la classe Stella ho fatto modifiche qui
 
         Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY);
 
         boolean aggiuntoConSuccesso = stella.aggiungiPianeta(pianeta);
 
-        if (aggiuntoConSuccesso == true){
+        if (aggiuntoConSuccesso){
             System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
             System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
-        } else {
 
+        } else {
             System.out.println("\n Orbita già occupata ");
         }
     }
-
+    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     private static void aggiungiLuna(Stella stella, Scanner scanner) {
 
         // Controllo che esistano pianeti
         if(!stella.getPianeti().isEmpty()){
-            
+
             // Stampo l'elenco dei pianeti
             System.out.println();
             System.out.println("Ecco l'elenco dei pianeti presenti nel sistema stellare: ");
             for(Pianeta p : stella.getPianeti()){
-                System.out.println("- "+"'"+p.getId()+"'"+" distanza da "+stella.getId()+": "+p.getDistanza());
+                int[] coord = p.getCoord();
+                System.out.println("- "+"'"+p.getId()+"'"+" distanza da "+stella.getId()+": "+p.getDistanza()+"  [x:"+coord[0]+", y:"+coord[1]+"]" );
             }
             System.out.println();
 
@@ -263,7 +260,7 @@ public class Main {
             Pianeta pianetaTrovato = null;
 
             // Cerco il pianeta nella lista della stella
-            for(int i = 0; i < stella.getPianeti().size() && pianetaTrovato==null; i++) {
+            for(int i = 0; i < stella.getPianeti().size() && pianetaTrovato == null; i++) {
                 Pianeta p = stella.getPianeti().get(i);
                 if (p.getId().equalsIgnoreCase(nomePianetaCercato)) {
                     pianetaTrovato = p;
@@ -288,7 +285,7 @@ public class Main {
                     massa = Integer.parseInt(scanner.nextLine());
                     check = false;
                 }catch (Exception e){
-                    System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
+                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                     check = true;
                 }
             }while (check);
@@ -302,11 +299,15 @@ public class Main {
                     System.out.print("\nInserisci la coordinata Y della luna: ");
                     coordY = Integer.parseInt(scanner.nextLine());
                     if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
-                        System.out.println("\n !!!! inserisci dei valori compresi tra -100 e 100 !!!!");
+                        System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
+                        check = true;
+                    }
+                    if (coordX == 0 && coordY == 0) {
+                        System.out.println("\n!!! La luna non può trovarsi al centro del sistema stellare !!!");
                         check = true;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("\n !!!! Inserisci dei valori adeguati !!!!");
+                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                     check = true;
                 }
             } while (check);
@@ -321,8 +322,7 @@ public class Main {
             } else {
                 System.out.println(" Non riuscito, l'orbita è già occupata da un'altra luna oppure la distanza supera la massa del pianeta.");
             }
-        }
-        else{
+        } else{
             System.out.println("Non ci sono pianeti a cui aggiungere una luna!!");
         }
 
@@ -345,13 +345,10 @@ public class Main {
                 System.out.println("- Massa: " + stella.getMassa());
                 int[] coordinate = stella.getCoord();
                 System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
-                return null;
             }
-            else{
-                return null;
-            }
-        }
-        else{
+            return null;
+
+        } else{
             // vado a controllare i pianeti e le lune
             for (int i = 0; i < stella.getPianeti().size(); i++){
                 Pianeta pianetaAttuale = stella.getPianeti().get(i);
@@ -373,21 +370,16 @@ public class Main {
                             for(Luna l : pianetaAttuale.getLune()){
                                 if(pianetaAttuale.getLune().size()>1){
                                     System.out.print(l.getId()+", ");
-                                }
-                                else{
+                                } else{
                                     System.out.print(l.getId());
                                 }
                             }
                             System.out.println();
-                        }
-                        else {
+                        } else {
                             System.out.println("Il pianeta non possiede alcuna luna che gli orbita attorno");
                         }
-                        return pianetaAttuale;
                     }
-                    else{
-                        return pianetaAttuale;
-                    }
+                    return pianetaAttuale;
                 }
 
                 for (int j = 0; j < pianetaAttuale.getLune().size(); j++){
@@ -403,11 +395,8 @@ public class Main {
                             System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
                             System.out.println("- Distanza dal suo Pianeta: " + lunaAttuale.getDistanza());
                             System.out.println("Percorso per essere raggiunta: "+stella.getId()+" > "+pianetaAttuale.getId()+" > "+lunaAttuale.getId());
-                            return lunaAttuale;
                         }
-                        else{
-                            return lunaAttuale;
-                        }
+                        return lunaAttuale;
                     }
                 }
             }
@@ -415,18 +404,15 @@ public class Main {
 
         if(execute){
             System.out.println("\nNon e' stato trovato nessun corpo, controlla di aver digitato il nome corretto");
-            return null;
         }
-        else{
-            return null;
-        }
+        return null;
 
     }
 
     // Rimuovi corpo
     private static void rimuoviCorpo(Stella stella, Scanner scanner){
         Corpo c = cercaCorpo(stella, scanner,false);
-        String userInput = "";
+        String userInput;
         if(c!=null){
             if(c.getGrado()==2){ // è un pianeta e lo rimuovo
                 Pianeta p = (Pianeta) c; //Downcasting
@@ -475,7 +461,7 @@ public class Main {
             Pianeta p = new Pianeta("Pianeta"+i,12,i,i);
             stella.aggiungiPianeta(p);
             for(int k=0;k<10;k++){
-                p.aggiungiLuna(new Luna("Luna"+i+""+k,2,i+1,i+1,p));
+                p.aggiungiLuna(new Luna("Luna"+i+k,2,i+1,i+1,p));
             }
         }
     }

@@ -15,7 +15,9 @@ public class Pianeta extends Corpo{
         return lune;
     }
 
+    // TODO -> Fare comparire il commento adeguato in base all'errore che l'utente commette
     public boolean aggiungiLuna(Luna luna){
+        boolean aggiungi = true;
 
         // da cio che ho capito dal README è che la grandezza dell'orbita massima dipende dalla massa del pianeta
         // e che una luna non può avere la stessa orbita di un'altra luna
@@ -28,22 +30,24 @@ public class Pianeta extends Corpo{
 
         if (luna.getDistanza() > distanzaMassimaConsentita) {
             // la luna è lontana e quindi il pianeta non riesce ad attrarla
-            return false;
+            aggiungi =  false;
         }
 
-        // ho controllato se l orbita è occupata
+        // ho controllato se l orbita è occupata o se le posizioni del pianeta e della luna sono le medesime
 
-        for (int i = 0; i < this.lune.size(); i++) {
+        for (Luna lunaEsistente : this.lune) {
 
-            Luna lunaEsistente = this.lune.get(i);
             // Se hanno la stessa distanza dal pianeta, l'orbita è occupata
-            if (luna.getDistanza() == lunaEsistente.getDistanza()) {
-                return false;
+            if ( (luna.getDistanza() == lunaEsistente.getDistanza()) || luna.getDistanza() == 0 ) {
+                aggiungi = false;
+                break;
             }
         }
 
-        this.lune.add(luna);
+        if (aggiungi) {
+            this.lune.add(luna);
+        }
 
-        return true;
+        return aggiungi;
     }
 }
