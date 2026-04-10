@@ -206,11 +206,20 @@ public class Main {
     }
 
     private static void aggiungiPianeta(Stella stella, Scanner scanner) {
-        boolean corretto;
+        boolean corretto, nuovo;
         int massa = 0, coordX = 0, coordY= 0;
+        String id;
 
-        System.out.print("\nInserisci il nome del pianeta: ");
-        String id = scanner.nextLine();
+        do {
+            nuovo = true;
+            System.out.print("\nInserisci il nome del pianeta: ");
+            id = scanner.nextLine();
+            if(esiste(id, stella)){
+                System.out.println("Nome già in uso nel sistema stellare!");
+                nuovo = false;
+            }
+        }while (!nuovo);
+
 
         do {
             try {
@@ -294,8 +303,24 @@ public class Main {
                 return;
             }
 
-            System.out.print("\nInserisci il nome della luna: ");
-            String idLuna = scanner.nextLine();
+            String idLuna = null;
+            boolean nuovo;
+
+            do {
+                try{
+                    nuovo = true;
+                    System.out.print("\nInserisci il nome della luna: ");
+                    idLuna = scanner.nextLine();
+                    if(esiste(idLuna, stella)){
+                        System.out.println("Nome già in uso nel sistema stellare!");
+                        nuovo = false;
+                    }
+                } catch (Exception e) {
+                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
+                    nuovo = false;
+                }
+
+            }while (!nuovo);
 
             boolean corretto;
             int massa = 0, coordX = 0, coordY = 0;
@@ -370,7 +395,7 @@ public class Main {
 
         if (stella.getId().equalsIgnoreCase(nomeCercato)){
             if(execute){
-                System.out.println("Corpo trovato,  e' la stella del sistema.");
+                System.out.println("Corpo trovato! È la stella del sistema.");
                 System.out.println("- Nome: " + stella.getId());
                 System.out.println("- Massa: " + stella.getMassa());
                 int[] coordinate = stella.getCoord();
@@ -551,5 +576,29 @@ public class Main {
             }
         }
     }
+
+    // Cerca se esiste un corpo con lo stesso nome dato.
+    private static boolean esiste(String nomeCorpo, Stella stella){
+        boolean esiste = false;
+        for (Pianeta p : stella.pianeti){
+            if (p.getId().equalsIgnoreCase(nomeCorpo)) {
+                esiste = true;
+                break;
+            }
+        }
+        for (Pianeta p : stella.pianeti){
+            for (Luna l : p.lune){
+                if (l.getId().equalsIgnoreCase(nomeCorpo)) {
+                    esiste = true;
+                    break;
+                }
+            }
+        }
+
+
+
+        return esiste;
+    }
+
 }
 
