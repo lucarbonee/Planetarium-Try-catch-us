@@ -13,4 +13,9 @@ public class Luna extends Corpo{
     public Pianeta getPianeta() {
         return pianeta;
     }
+
+    @Override
+    public Corpo getInferiore() {
+        return this.pianeta;
+    }
 }

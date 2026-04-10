@@ -1,3 +1,7 @@
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 
 // TODO funzionalita base
@@ -84,6 +88,11 @@ public class Main {
                     pulisciConsole(scanner);
                     break;
                 }
+                case("rotta"):{
+                    calcolaRotta(stella, scanner);
+                    pulisciConsole(scanner);
+                    break;
+                }
                 case("esci"):{
                     System.out.println("Grazie di aver utilizzato Planetarium!!");
                     break;
@@ -153,6 +162,7 @@ public class Main {
         System.out.println("+corpo -> crea pianeta/luna");
         System.out.println("-corpo -> rimuovi pianeta/luna");
         System.out.println("cerca  -> cerca un determinato corpo");
+        System.out.println("rotta -> visualizza la rotta da un corpo all'altro");
         System.out.println("//////////////////");
         System.out.println();
     }
@@ -234,7 +244,7 @@ public class Main {
             }
         } while (check);
 
-        Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY);
+        Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY, stella);
 
         boolean pianetaAggiunto = stella.aggiungiPianeta(pianeta);
         if (pianetaAggiunto){
@@ -340,7 +350,7 @@ public class Main {
         System.out.print("\nInserire il nome del corpo: ");
         String nomeCercato = scanner.nextLine();
 
-        System.out.println("\nRicerca in corso di: " + nomeCercato );
+        if(execute){System.out.println("\nRicerca in corso di: " + nomeCercato );}
 
         // vado a controllare la stella
 
@@ -352,7 +362,7 @@ public class Main {
                 int[] coordinate = stella.getCoord();
                 System.out.println("- Coordinate: (" + coordinate[0] + ", " + coordinate[1] + ")");
             }
-            return null;
+            return stella;
 
         } else{
             // vado a controllare i pianeti e le lune
@@ -449,11 +459,14 @@ public class Main {
                 }
 
             }
-            else{
+            else if(c.getGrado()==3){
                 Luna l = (Luna) c;
                 Pianeta p = l.getPianeta(); // Downcasting da corpo a luna
                 p.getLune().remove(l);
                 System.out.println("La luna "+l.getId()+" e' stata rimossa con successo dal pianeta "+p.getId());
+            }
+            else{
+                System.out.println("Non puoi rimuovere la stella del sistema!");
             }
         }
         else{
@@ -461,10 +474,63 @@ public class Main {
         }
     }
 
+    // Calcolo rotte
+    private static void calcolaRotta(Stella stella, Scanner scanner){
+
+        ArrayList<String> rotta = new ArrayList<>();
+        ArrayList<String> rotta1 = new ArrayList<>();
+
+        Corpo[] corpi = new Corpo[2];
+        corpi[0] = new Corpo("a",1,1,1,1);
+        corpi[1] = new Corpo("a",1,1,1,1);
+        // Cerco il corpo
+        System.out.println("Ora ti verranno richiesti i nomi dei due corpi");
+        System.out.println("Inserisci il corpo di partenza, poi quello di arrivo");
+        for(int i=0;i<2 && (corpi[0]!=null && corpi[1]!=null);i++){
+            corpi[i] = cercaCorpo(stella,scanner,false);
+        }
+
+        if(corpi[0] == null || corpi[1] == null){
+            System.out.println("Il corpo che hai inserito non esiste, impossibile calcolare la rotta");
+        }
+        else{
+            if(((corpi[0].getGrado()==corpi[1].getGrado()) && corpi[0].getGrado()==3) && corpi[0].getInferiore()==corpi[1].getInferiore()){
+                System.out.println("La rotta tra i due pianeti e': ");
+                System.out.println(corpi[0].getId() + " " +corpi[0].getInferiore().getId()+" "+corpi[1].getId());
+            } else if (corpi[0]==corpi[1]) {
+                System.out.println("La rotta tra i due pianeti e': ");
+                System.out.println(corpi[0].getId());
+            } else{
+
+
+                while(corpi[0]!=stella){
+                    rotta.add(corpi[0].getId());
+                    corpi[0] = corpi[0].getInferiore();
+                }
+
+                rotta.add(stella.getId());
+
+                while(corpi[1]!=stella){
+                    rotta1.add(corpi[1].getId());
+                    corpi[1] = corpi[1].getInferiore();
+                }
+
+                Collections.reverse(rotta1);
+
+                rotta.addAll(rotta1);
+                System.out.println("La rotta tra i due pianeti e': ");
+                for(String s : rotta){
+                    System.out.print(s+"    ");
+                }
+            }
+        }
+
+    }
+
     // Genera corpi
     private static void generaCorpi(Stella stella){
         for(int i=0;i<80;i+=2){
-            Pianeta p = new Pianeta("Pianeta"+i,12,i,i);
+            Pianeta p = new Pianeta("Pianeta"+i,12,i,i,stella);
             stella.aggiungiPianeta(p);
             for(int k=0;k<10;k++){
                 p.aggiungiLuna(new Luna("Luna"+i+k,2,i+1,i+1,p));

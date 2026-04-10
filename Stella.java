@@ -31,4 +31,9 @@ public class Stella extends Corpo {
         }
         return aggiungi;
     }
+
+    @Override
+    public Corpo getInferiore() {
+        return this;
+    }
 }

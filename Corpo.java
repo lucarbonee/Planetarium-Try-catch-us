@@ -1,4 +1,4 @@
-public abstract class Corpo {
+public class Corpo {
     String id;
     int massa, grado, coordX, coordY;
     double distanza = 0;
@@ -30,6 +30,10 @@ public abstract class Corpo {
 
     public double getDistanza() {
         return distanza;
+    }
+
+    public Corpo getInferiore(){
+        return null;
     }
 
 }
