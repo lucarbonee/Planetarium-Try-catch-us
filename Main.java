@@ -6,7 +6,11 @@ import java.util.Scanner;
 // Aggiornare il readme
 
 // TODO funzionalità aggiuntive
-// Collisioni (parlzialmente già realizzata)
+// Collisioni:
+// Pianeta-Pianeta
+// Luna-Luna
+// Luna-Pianeta
+// Luna-stella
 
 public class Main {
     final static int MIN = 20;
