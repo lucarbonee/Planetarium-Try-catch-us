@@ -239,7 +239,7 @@ public class Main {
                 }
             }
 
-            if(esiste(id, stella)){
+            if(esiste(id, stella) || id.equalsIgnoreCase(stella.getId())){
                 System.out.println("Nome già in uso nel sistema stellare!");
                 id = "";
                 nuovo = false;
@@ -252,8 +252,8 @@ public class Main {
                 System.out.print("\nInserisci la massa del pianeta: ");
                 massa = Integer.parseInt(scanner.nextLine());
 
-                if(massa >= stella.massa) {
-                    System.out.println("La massa del pianeta non può essere maggiore o uguale a quella della stella!");
+                if(massa >= stella.massa || massa<= 1) {
+                    System.out.println("La massa del pianeta non può essere maggiore o uguale a quella della stella o minore o uguale a 1!");
                     corretto = false;
                 } else
                     corretto = true;
@@ -343,7 +343,7 @@ public class Main {
                         }
                     }
 
-                    if(esiste(idLuna, stella)){
+                    if(esiste(idLuna, stella)  || idLuna.equalsIgnoreCase(stella.getId())){
                         System.out.println("Nome già in uso nel sistema stellare!");
                         idLuna = "";
                         nuovo = false;
