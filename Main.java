@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class Main {
     final static int MIN = 20;
     final static int MAX = 40;
+    private static ArrayList<Corpo> collisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
 
     public static void main(String[] args) {
@@ -105,6 +106,11 @@ public class Main {
                     pulisciConsole(scanner);
                     break;
                 }
+                case("collisioni"):{
+                    collisioni(stella);
+                    pulisciConsole(scanner);
+                    break;
+                }
                 case("esci"):{
                     System.out.println("Grazie di aver utilizzato Planetarium!!");
                     break;
@@ -153,7 +159,6 @@ public class Main {
 
     }
 
-
     // Da vedere -dani
     // Gestore leggibilità console
     private static void pulisciConsole(Scanner scanner){
@@ -169,13 +174,14 @@ public class Main {
     private static void stampaMenu(){
         System.out.println("//////////////////");
         System.out.println("Benvenuto nel menù");
-        System.out.println("menu   -> apri questa sezione");
-        System.out.println("esci   -> esci dal programma");
-        System.out.println("+corpo -> crea pianeta/luna");
-        System.out.println("-corpo -> rimuovi pianeta/luna");
-        System.out.println("cerca  -> cerca un determinato corpo");
-        System.out.println("rotta -> visualizza la rotta da un corpo all'altro");
-        System.out.println("cmassa -> calcola il centro di massa del sistema stellare");
+        System.out.println("menu    -> apri questa sezione");
+        System.out.println("esci    -> esci dal programma");
+        System.out.println("+corpo  -> crea pianeta/luna");
+        System.out.println("-corpo  -> rimuovi pianeta/luna");
+        System.out.println("cerca   -> cerca un determinato corpo");
+        System.out.println("rotta   -> visualizza la rotta da un corpo all'altro");
+        System.out.println("cMassa  -> calcola il centro di massa del sistema stellare");
+        System.out.println("collisioni -> indica se sono presenti delle collisioni nel S. stellare");
         System.out.println("//////////////////");
         System.out.println();
     }
@@ -649,8 +655,6 @@ public class Main {
                 esiste = true;
                 break;
             }
-        }
-        for (Pianeta p : stella.pianeti){
             for (Luna l : p.lune){
                 if (l.getId().equalsIgnoreCase(nomeCorpo)) {
                     esiste = true;
@@ -658,9 +662,14 @@ public class Main {
                 }
             }
         }
-
         return esiste;
     }
+
+
+    private static void collisioni(Stella stella) {
+
+    }
+
 
 }
 
