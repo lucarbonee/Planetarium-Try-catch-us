@@ -10,7 +10,7 @@ public class Pianeta extends Corpo{
 
         // calcolo della distanza del pianeta dalla stella (centro)
         this.distanza = Math.round(Math.sqrt(Math.pow(coordX, 2) + Math.pow(coordY, 2)) * 100.0) / 100.0;
-        this.stella=stella;
+        this.stella = stella;
     }
 
     public ArrayList<Luna> getLune() {
@@ -18,38 +18,7 @@ public class Pianeta extends Corpo{
     }
 
     public boolean aggiungiLuna(Luna luna){
-        boolean aggiungi = true;
-
-        // da cio che ho capito dal README è che la grandezza dell'orbita massima dipende dalla massa del pianeta
-        // e che una luna non può avere la stessa orbita di un'altra luna
-
-        // (Forza di attrazione)
-        // VISTO CHE DOBBIAMO PARLARNE ho supposto per semplicità e ricerca che la distanza massima a cui può stare una luna
-        // è esattamente uguale alla massa del pianeta
-
-        double distanzaMassimaConsentita = this.massa;
-
-        if (luna.getDistanza() > distanzaMassimaConsentita) {
-            // la luna è lontana e quindi il pianeta non riesce ad attrarla
-            aggiungi =  false;
-        }
-
-        // ho controllato se l orbita è occupata o se le posizioni del pianeta e della luna sono le medesime
-
-        for (Luna lunaEsistente : this.lune) {
-
-            // Se hanno la stessa distanza dal pianeta, l'orbita è occupata
-            if ( (luna.getDistanza() == lunaEsistente.getDistanza()) || luna.getDistanza() == 0 ) {
-                aggiungi = false;
-                break;
-            }
-        }
-
-        if (aggiungi) {
-            this.lune.add(luna);
-        }
-
-        return aggiungi;
+        return this.lune.add(luna);
     }
 
     @Override
