@@ -6,8 +6,8 @@ Realizzato da _"Try-catch us"_ ---> _Mattia Cappa, Danis Halilovic, Luca Carbone
 ### 1.1) Costituzione del sistema stellare
 Nel nostro sistema stellare i corpi hanno determinate regole:
 - Esiste solamente un'unica stella a cui ruotano attorno i pianeti
-- Un pianeta non può avere la stessa orbita di un altro pianeta
-- Una luna (o satellite) non può avere la stessa orbita di un'altra luna
+- Un pianeta può avere la stessa orbita di un altro pianeta 
+- Una luna (o satellite) può avere la stessa orbita di un'altra luna
 - Ogni pianeta a seconda della propria massa dispone di una forza di attrazione verso le lune, la quale determina la grandezza dell'orbita massima che può assumere una luna
 
 ### 1.2) Distanze e posizioni

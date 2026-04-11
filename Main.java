@@ -10,7 +10,7 @@ import java.util.Scanner;
 // Pianeta-Pianeta
 // Luna-Luna
 // Luna-Pianeta
-// Luna-stella
+// Luna-Stella
 
 public class Main {
     final static int MIN = 20;
@@ -235,6 +235,7 @@ public class Main {
 
             if(esiste(id, stella)){
                 System.out.println("Nome già in uso nel sistema stellare!");
+                id = "";
                 nuovo = false;
             }
         }while (!nuovo);
@@ -338,6 +339,7 @@ public class Main {
 
                     if(esiste(idLuna, stella)){
                         System.out.println("Nome già in uso nel sistema stellare!");
+                        idLuna = "";
                         nuovo = false;
                     }
                 } catch (Exception e) {
