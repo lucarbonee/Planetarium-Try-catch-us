@@ -1,6 +1,6 @@
 public class Corpo {
-    String id;
-    int massa, grado, coordX, coordY;
+    private final String id;
+    private final int massa, grado, coordX, coordY;
     double distanza = 0;
 
     protected Corpo(String id, int massa, int grado, int coordX, int coordY) {
@@ -26,6 +26,14 @@ public class Corpo {
 
     public int[] getCoord() {
         return new int[]{coordX, coordY};
+    }
+
+    public int getCoordX() {
+        return coordX;
+    }
+
+    public int getCoordY() {
+        return coordY;
     }
 
     public double getDistanza() {

@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Pianeta extends Corpo{
 
-    Stella stella;
-    ArrayList<Luna> lune = new ArrayList<>();
+    private final Stella stella;
+    private final ArrayList<Luna> lune = new ArrayList<>();
 
     public Pianeta(String id, int massa, int coordX, int coordY, Stella stella) {
         super(id, massa, 2, coordX, coordY);
