@@ -3,13 +3,13 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.Arrays;
 
-// TODO funzionalita base
-// Aggiornare il readme
+// TODO funzionalità base
+// Ultima controllata al readme
 
 // TODO funzionalità aggiuntive
 // Collisioni:
 // Pianeta-Pianeta --------------------> [fatto]
-// Luna-Luna (stessa orbita) ---------->
+// Luna-Luna (stessa orbita) ----------> [fatto]
 // Luna-Luna (orbita incidente) ------->
 // Luna-Pianeta ----------------------->
 // Luna-Stella ------------------------>
@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class Main {
     final static int MIN = 20;
     final static int MAX = 40;
-    private static ArrayList<Corpo> collisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
+    private static final ArrayList<Corpo> collisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
 
     public static void main(String[] args) {
@@ -118,40 +118,6 @@ public class Main {
             }
 
         }while(!(UserInput.equalsIgnoreCase("esci")));
-
-//        Stella s1 = new Stella("stellaaa", 25);
-//        int[] s1coord = s1.getCoord();
-//        System.out.println("x = " + s1coord[0] + " || y = " + s1coord[1]);
-//        System.out.println("distanza = " + s1.getDistanza());
-//        System.out.println( s1.getId() );
-//        System.out.println( s1.getMassa() );
-//        System.out.println( s1.getGrado() );
-//
-//        System.out.println("\n");
-//
-//        Pianeta p1 = new Pianeta("pianetaaa", 10, 10, 10);
-//        int[] p1coord = p1.getCoord();
-//        System.out.println("x = " + p1coord[0] + " || y = " + p1coord[1]);
-//        System.out.println("distanza = " + p1.getDistanza());
-//        System.out.println( p1.getId() );
-//        System.out.println( p1.getMassa() );
-//        System.out.println( p1.getGrado() );
-//
-//        s1.pianeti.add(p1);
-//        System.out.println("\n");
-//        System.out.println(s1.pianeti.getFirst().id);
-//
-//        System.out.println("\n");
-//        Luna l1 = new Luna("Lunaaa", 2, 12, 9, p1);
-//        int[] l1coord = l1.getCoord();
-//        System.out.println("x = " + l1coord[0] + " || y = " + l1coord[1]);
-//        System.out.println("distanza = " + l1.getDistanza());
-//        System.out.println( l1.getId() );
-//        System.out.println( l1.getMassa() );
-//        System.out.println( l1.getGrado() );
-//
-//        p1.lune.add(l1);
-//        System.out.println(p1.lune.getFirst().id);
 
     }
 
@@ -732,13 +698,13 @@ public class Main {
         boolean diverse = true;
         for (Pianeta p : stella.pianeti) {
             if ( Arrays.equals(p.getCoord(), c) ) {
-                System.out.println("\ncoordinate già occupate da: " + p.getId() + ".");
+                System.out.println("\nCoordinate già occupate da: " + p.getId() + ".");
                 diverse = false;
                 break;
             }
             for (Luna l : p.lune) {
                 if (Arrays.equals(l.getCoord(), c)) {
-                    System.out.println("\ncoordinate già occupate da: " + l.getId() + ".");
+                    System.out.println("\nCoordinate già occupate da: " + l.getId() + ".");
                     diverse = false;
                     break;
                 }
