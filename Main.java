@@ -7,12 +7,7 @@ import java.util.Arrays;
 // Ultima controllata al readme
 
 // TODO funzionalità aggiuntive
-// Collisioni:
-// Pianeta-Pianeta --------------------> [fatto]
-// Luna-Luna (stessa orbita) ----------> [fatto]
-// Luna-Luna (orbita incidente) -------> [fatto]
-// Luna-Pianeta -----------------------> [fatto]
-// Luna-Stella ------------------------>
+// Aggiungere maggiore specificità nell'elencare le collisioni
 
 public class Main {
     final static int MIN = 20;
@@ -418,7 +413,7 @@ public class Main {
                     System.out.println("\nLuna '" + idLuna + "' aggiunta con successo attorno al pianeta '" + pianetaTrovato.getId() + "'!");
                     System.out.println("Distanza dal pianeta: " + nuovaLuna.getDistanza());
 
-                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) ) {
+                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) || collidonoLS(nuovaLuna) ) {
                         collisioni.add(nuovaLuna);
                     }
 
@@ -655,7 +650,7 @@ public class Main {
 
     // Genera corpi
     private static void generaCorpi(Stella stella){
-        for(int i=0;i<80;i+=2){
+        for(int i=0;i<3;i+=2){
             Pianeta p = new Pianeta("Pianeta"+i,12,i,i,stella);
             stella.aggiungiPianeta(p);
             for(int k=0;k<10;k++){
@@ -703,7 +698,7 @@ public class Main {
     private static boolean collidonoPP (Pianeta p, Stella s) {
         boolean collidono = false;
         for (Pianeta pCiclo: s.getPianeti()){
-            if ( (p != pCiclo) && (p.getDistanza() == pCiclo.getDistanza()) ){
+            if ( (p != pCiclo) && (p.getDistanza() == pCiclo.getDistanza()) ){ // Se i pianeti sono alla stessa distanza dalla stella (hanno la stessa orbita) collidono
                 collidono = true;
                 break;
             }
@@ -764,6 +759,14 @@ public class Main {
         }
         return collidono;
     }
+
+    // Controlla se la luna e una stella collidono
+    private static boolean collidonoLS(Luna l){
+
+        return l.getPianeta().getDistanza() == l.getDistanza(); // Se la distanza tra stella e pianeta e l'orbita della luna attorno al pianeta coincidono collidono
+
+    }
+
 
     // Controlla se un pianeta può collidere con una qualsiasi luna
     private static boolean collidonoPL(Pianeta p, Stella stella){
