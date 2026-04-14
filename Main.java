@@ -17,6 +17,8 @@ import java.util.Arrays;
 public class Main {
     final static int MIN = 20;
     final static int MAX = 40;
+    final static int MAX_PIANETI = 26000;
+    final static int MAX_LUNE = 5000;
     private static final ArrayList<Corpo> collisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
 
@@ -191,83 +193,92 @@ public class Main {
         int massa = 0, coordX = 0, coordY= 0;
         String id="";
 
-        do {
-            nuovo = true;
-            while(id.isEmpty() || id.contains(" ") || id.contains("\t")){
-                System.out.print("\nInserisci il nome del pianeta: ");
-                id = scanner.nextLine();
-                if(id.isEmpty()  || id.contains(" ") || id.contains("\t")){
-                    System.out.println("Il nome dell pianeta non può essere vuoto o contenere spazi!");
-                }
-            }
 
-            if(esiste(id, stella) || id.equalsIgnoreCase(stella.getId())){
-                System.out.println("Nome già in uso nel sistema stellare!");
-                id = "";
-                nuovo = false;
-            }
-        }while (!nuovo);
-
-
-        do {
-            try {
-                System.out.print("\nInserisci la massa del pianeta: ");
-                massa = Integer.parseInt(scanner.nextLine());
-
-                if(massa >= stella.getMassa() || massa<= 1) {
-                    System.out.println("La massa del pianeta non può essere maggiore o uguale a quella della stella o minore o uguale a 1!");
-                    corretto = false;
-                } else
-                    corretto = true;
-
-            }catch (Exception e){
-                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                corretto = false;
-            }
-        }while (!corretto);
-
-        do {
-            corretto = true;
-            try {
-                System.out.print("\nInserisci la coordinata X del pianeta: ");
-                coordX = Integer.parseInt(scanner.nextLine());
-                System.out.print("\nInserisci la coordinata Y del pianeta: ");
-                coordY = Integer.parseInt(scanner.nextLine());
-                if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
-                    System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
-                    corretto = false;
-                }
-                if ( coordX == 0 && coordY == 0 ) {
-                    System.out.println("\n !!! Il pianeta non può essere al centro del sistema stellare !!!");
-                    corretto = false;
-                }
-
-                //controllo che la posizione del pianeta sia libera
-                int[] coordNuovoPianeta = {coordX, coordY};
-                if(corretto){
-                    corretto = coordLibere(coordNuovoPianeta, stella);
-                }
-
-
-            } catch (NumberFormatException e) {
-                System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                corretto = false;
-            }
-        } while (!corretto);
-
-        Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY, stella);
-
-        boolean pianetaAggiunto = stella.aggiungiPianeta(pianeta);
-        if (pianetaAggiunto){
-            System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
-            System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
-
-            if (collidonoPP(pianeta, stella) || collidonoPL(pianeta, stella))
-                collisioni.add(pianeta);
-
-        } else {
-            System.out.println("\nQualcosa è andato storto !");
+        if(stella.getPianeti().size()>=MAX_PIANETI){ // Raggiunto limite max pianeti
+            System.out.println("Limite pianeti raggiunto!! (ventiseimila)");
+            System.out.println("Se vuoi aggiungere altri pianeti elimina qualcuno degli esistenti");
         }
+        else{  // E' ancora possibile aggiungere un pianeta
+            do {
+                nuovo = true;
+                while(id.isEmpty() || id.contains(" ") || id.contains("\t")){
+                    System.out.print("\nInserisci il nome del pianeta: ");
+                    id = scanner.nextLine();
+                    if(id.isEmpty()  || id.contains(" ") || id.contains("\t")){
+                        System.out.println("Il nome dell pianeta non può essere vuoto o contenere spazi!");
+                    }
+                }
+
+                if(esiste(id, stella) || id.equalsIgnoreCase(stella.getId())){
+                    System.out.println("Nome già in uso nel sistema stellare!");
+                    id = "";
+                    nuovo = false;
+                }
+            }while (!nuovo);
+
+
+            do {
+                try {
+                    System.out.print("\nInserisci la massa del pianeta: ");
+                    massa = Integer.parseInt(scanner.nextLine());
+
+                    if(massa >= stella.getMassa() || massa<= 1) {
+                        System.out.println("La massa del pianeta non può essere maggiore o uguale a quella della stella o minore o uguale a 1!");
+                        corretto = false;
+                    } else
+                        corretto = true;
+
+                }catch (Exception e){
+                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
+                    corretto = false;
+                }
+            }while (!corretto);
+
+            do {
+                corretto = true;
+                try {
+                    System.out.print("\nInserisci la coordinata X del pianeta: ");
+                    coordX = Integer.parseInt(scanner.nextLine());
+                    System.out.print("\nInserisci la coordinata Y del pianeta: ");
+                    coordY = Integer.parseInt(scanner.nextLine());
+                    if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
+                        System.out.println("\n !!! inserisci dei valori compresi tra -100 e 100 !!!");
+                        corretto = false;
+                    }
+                    if ( coordX == 0 && coordY == 0 ) {
+                        System.out.println("\n !!! Il pianeta non può essere al centro del sistema stellare !!!");
+                        corretto = false;
+                    }
+
+                    //controllo che la posizione del pianeta sia libera
+                    int[] coordNuovoPianeta = {coordX, coordY};
+                    if(corretto){
+                        corretto = coordLibere(coordNuovoPianeta, stella);
+                    }
+
+
+                } catch (NumberFormatException e) {
+                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
+                    corretto = false;
+                }
+            } while (!corretto);
+
+            Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY, stella);
+
+            boolean pianetaAggiunto = stella.aggiungiPianeta(pianeta);
+            if (pianetaAggiunto){
+                System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
+                System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
+
+                if (collidonoPP(pianeta, stella) || collidonoPL(pianeta, stella))
+                    collisioni.add(pianeta);
+
+            } else {
+                System.out.println("\nQualcosa è andato storto !");
+            }
+        }
+
+
     }
 
     private static void aggiungiLuna(Stella stella, Scanner scanner) {
@@ -304,111 +315,118 @@ public class Main {
             String idLuna = "";
             boolean nuovo;
 
-            do {
-                try{
-                    nuovo = true;
-                    while(idLuna.isEmpty() || idLuna.contains(" ") || idLuna.contains("\t")){
-                        System.out.print("\nInserisci il nome della luna: ");
-                        idLuna = scanner.nextLine();
-                        if(idLuna.isEmpty()  || idLuna.contains(" ") || idLuna.contains("\t")){
-                            System.out.println("Il nome della luna non può essere vuoto o contenere spazi!");
+            if(pianetaTrovato.getLune().size()>=MAX_LUNE){ // Superato numero max lune
+                System.out.println("Limite lune raggiunto!! (cinquemila)");
+                System.out.println("Se vuoi aggiungere altre lune elimina quelle esistenti");
+            }
+            else{ // L'utente può aggiungere nuove lune
+                do {
+                    try{
+                        nuovo = true;
+                        while(idLuna.isEmpty() || idLuna.contains(" ") || idLuna.contains("\t")){
+                            System.out.print("\nInserisci il nome della luna: ");
+                            idLuna = scanner.nextLine();
+                            if(idLuna.isEmpty()  || idLuna.contains(" ") || idLuna.contains("\t")){
+                                System.out.println("Il nome della luna non può essere vuoto o contenere spazi!");
+                            }
                         }
-                    }
 
-                    if(esiste(idLuna, stella)  || idLuna.equalsIgnoreCase(stella.getId())){
-                        System.out.println("Nome già in uso nel sistema stellare!");
-                        idLuna = "";
+                        if(esiste(idLuna, stella)  || idLuna.equalsIgnoreCase(stella.getId())){
+                            System.out.println("Nome già in uso nel sistema stellare!");
+                            idLuna = "";
+                            nuovo = false;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("\n !!! Inserisci dei valori adeguati !!!");
                         nuovo = false;
                     }
-                } catch (Exception e) {
-                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                    nuovo = false;
-                }
 
-            }while (!nuovo);
+                }while (!nuovo);
 
-            boolean corretto;
-            int massa = 0, coordX = 0, coordY = 0;
+                boolean corretto;
+                int massa = 0, coordX = 0, coordY = 0;
 
-            // Controllo massa
-            do {
-                try {
+                // Controllo massa
+                do {
+                    try {
+                        corretto = true;
+                        System.out.print("\nInserisci la massa della luna: ");
+                        massa = Integer.parseInt(scanner.nextLine());
+                        if (massa >= pianetaTrovato.getMassa()) {
+                            System.out.println("La massa della luna non può essere maggiore o uguale a quella del proprio centro gravitazionale, ovvero di " + pianetaTrovato.getMassa());
+                            corretto = false;
+                        }
+                        if (massa <= 0) {
+                            System.out.println("La massa non può essere nulla o negativa");
+                            corretto = false;
+                        }
+                    }catch (Exception e){
+                        System.out.println("\n !!! Inserisci dei valori adeguati !!!");
+                        corretto = false;
+                    }
+                }while (!corretto);
+
+                // Controllo coordinate
+                do {
                     corretto = true;
-                    System.out.print("\nInserisci la massa della luna: ");
-                    massa = Integer.parseInt(scanner.nextLine());
-                    if (massa >= pianetaTrovato.getMassa()) {
-                        System.out.println("La massa della luna non può essere maggiore o uguale a quella del proprio centro gravitazionale, ovvero di " + pianetaTrovato.getMassa());
+                    try {
+                        System.out.print("\nInserisci la coordinata X della luna: ");
+                        coordX = Integer.parseInt(scanner.nextLine());
+                        System.out.print("\nInserisci la coordinata Y della luna: ");
+                        coordY = Integer.parseInt(scanner.nextLine());
+                        if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
+                            System.out.println("\n!!! inserisci dei valori compresi tra -100 e 100 !!!");
+                            corretto = false;
+                        }
+                        if (corretto && (coordX == 0 && coordY == 0)) {
+                            System.out.println("\n!!! La luna non può trovarsi al centro del sistema stellare !!!");
+                            corretto = false;
+                        }
+
+                        int[] coordNuovaLuna = {coordX, coordY};
+                        //controllo che la posizione della luna sia libera
+                        if (corretto && (Arrays.equals(coordNuovaLuna, pianetaTrovato.getCoord()))) {
+                            System.out.println("\nNon puoi posizionare la Luna alle stesse coordinate del suo pianeta");
+                            corretto = false;
+                        } else if(corretto){
+                            corretto = coordLibere(coordNuovaLuna, stella);
+                        }
+
+                        int distanzaMassimaConsentita = pianetaTrovato.getMassa();
+
+                        // (Forza di attrazione)
+                        // Ho supposto per semplicità che la distanza massima a cui può stare una luna
+                        // è esattamente uguale alla massa del pianeta
+                        if (Math.round(Math.sqrt(Math.pow( coordX - pianetaTrovato.getCoordX() , 2) + Math.pow( coordY - pianetaTrovato.getCoordY(), 2)) * 100.0 ) / 100.0 > distanzaMassimaConsentita) {
+                            // la luna è lontana e quindi il pianeta non riesce ad attrarla
+                            System.out.println("\nLuna troppo lontana dal pianeta!");
+                            corretto =  false;
+                        }
+
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("\n!!! Inserisci dei valori adeguati !!!");
                         corretto = false;
                     }
-                    if (massa <= 0) {
-                        System.out.println("La massa non può essere nulla o negativa");
-                        corretto = false;
+                } while (!corretto);
+
+                Luna nuovaLuna = new Luna(idLuna, massa, coordX, coordY, pianetaTrovato);
+
+                boolean aggiuntoConSuccesso = pianetaTrovato.aggiungiLuna(nuovaLuna);
+
+                if (aggiuntoConSuccesso) {
+                    System.out.println("\nLuna '" + idLuna + "' aggiunta con successo attorno al pianeta '" + pianetaTrovato.getId() + "'!");
+                    System.out.println("Distanza dal pianeta: " + nuovaLuna.getDistanza());
+
+                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) ) {
+                        collisioni.add(nuovaLuna);
                     }
-                }catch (Exception e){
-                    System.out.println("\n !!! Inserisci dei valori adeguati !!!");
-                    corretto = false;
+
+                } else {
+                    System.out.println("\nQualcosa è andato storto nell'aggiunta di: " + nuovaLuna.getId() + ".");
                 }
-            }while (!corretto);
-
-            // Controllo coordinate
-            do {
-                corretto = true;
-                try {
-                    System.out.print("\nInserisci la coordinata X della luna: ");
-                    coordX = Integer.parseInt(scanner.nextLine());
-                    System.out.print("\nInserisci la coordinata Y della luna: ");
-                    coordY = Integer.parseInt(scanner.nextLine());
-                    if ((coordX < -100 || coordY < -100) || (coordX > 100 || coordY > 100)) {
-                        System.out.println("\n!!! inserisci dei valori compresi tra -100 e 100 !!!");
-                        corretto = false;
-                    }
-                    if (corretto && (coordX == 0 && coordY == 0)) {
-                        System.out.println("\n!!! La luna non può trovarsi al centro del sistema stellare !!!");
-                        corretto = false;
-                    }
-
-                    int[] coordNuovaLuna = {coordX, coordY};
-                    //controllo che la posizione della luna sia libera
-                    if (corretto && (Arrays.equals(coordNuovaLuna, pianetaTrovato.getCoord()))) {
-                        System.out.println("\nNon puoi posizionare la Luna alle stesse coordinate del suo pianeta");
-                        corretto = false;
-                    } else if(corretto){
-                        corretto = coordLibere(coordNuovaLuna, stella);
-                    }
-
-                    int distanzaMassimaConsentita = pianetaTrovato.getMassa();
-
-                    // (Forza di attrazione)
-                    // Ho supposto per semplicità che la distanza massima a cui può stare una luna
-                    // è esattamente uguale alla massa del pianeta
-                    if (Math.round(Math.sqrt(Math.pow( coordX - pianetaTrovato.getCoordX() , 2) + Math.pow( coordY - pianetaTrovato.getCoordY(), 2)) * 100.0 ) / 100.0 > distanzaMassimaConsentita) {
-                        // la luna è lontana e quindi il pianeta non riesce ad attrarla
-                        System.out.println("\nLuna troppo lontana dal pianeta!");
-                        corretto =  false;
-                    }
-
-
-                } catch (NumberFormatException e) {
-                    System.out.println("\n!!! Inserisci dei valori adeguati !!!");
-                    corretto = false;
-                }
-            } while (!corretto);
-
-            Luna nuovaLuna = new Luna(idLuna, massa, coordX, coordY, pianetaTrovato);
-
-            boolean aggiuntoConSuccesso = pianetaTrovato.aggiungiLuna(nuovaLuna);
-
-            if (aggiuntoConSuccesso) {
-                System.out.println("\nLuna '" + idLuna + "' aggiunta con successo attorno al pianeta '" + pianetaTrovato.getId() + "'!");
-                System.out.println("Distanza dal pianeta: " + nuovaLuna.getDistanza());
-
-                if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) ) {
-                    collisioni.add(nuovaLuna);
-                }
-
-            } else {
-                System.out.println("\nQualcosa è andato storto nell'aggiunta di: " + nuovaLuna.getId() + ".");
             }
+
         } else{
             System.out.println("Non ci sono pianeti a cui aggiungere una luna!!");
         }
