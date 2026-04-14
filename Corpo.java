@@ -9,7 +9,6 @@ public class Corpo {
         this.grado = grado;
         this.coordX = coordX;
         this.coordY = coordY;
-
     }
 
     public String getId() {
