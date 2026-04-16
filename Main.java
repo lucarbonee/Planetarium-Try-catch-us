@@ -251,7 +251,7 @@ public class Main {
                 }
             } while (!corretto);
 
-            Pianeta pianeta =  new Pianeta(id, massa, coordX, coordY, stella);
+            Pianeta pianeta = new Pianeta(id, massa, coordX, coordY, stella);
 
             boolean pianetaAggiunto = stella.aggiungiPianeta(pianeta);
             if (pianetaAggiunto){
@@ -542,6 +542,11 @@ public class Main {
 
                 if(userInput.equals("si")){
                     stella.getPianeti().remove(c);
+                    collisioni.remove(c);
+                    for (Luna lCiclo: p.getLune()){
+                        collisioni.remove(lCiclo);
+                    }
+
                     System.out.println("Il pianeta '"+c.getId()+"' è stato rimosso con successo dal sistema stellare");
                 }
                 else{
@@ -550,9 +555,10 @@ public class Main {
 
             }
             else if(c.getGrado()==3){ // è una luna e la rimuovo
-                Luna l = (Luna) c;
-                Pianeta p = l.getPianeta(); // Downcasting da corpo a luna
+                Luna l = (Luna) c; // Downcasting da corpo a luna
+                Pianeta p = l.getPianeta();
                 p.getLune().remove(l);
+                collisioni.remove(l);
                 System.out.println("La luna '"+l.getId()+"' è stata rimossa con successo dal pianeta '"+p.getId()+"'");
             }
             else{
@@ -735,7 +741,7 @@ public class Main {
                 if (l != lCiclo){
                     double dMaxl2 = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
                     double dMinl2 = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
-                    if (dMaxl1 >= dMinl2 || dMaxl2 >= dMinl1) {
+                    if ( (dMaxl1 >= dMinl2 && dMaxl1 <= dMaxl2) || (dMaxl2 >= dMinl1 && dMaxl2 <= dMaxl1)) {
                         collidono = true;
                         break;
                     }
@@ -750,17 +756,18 @@ public class Main {
         return l.getPianeta().getDistanza() == l.getDistanza(); // Se la distanza tra stella e pianeta e l'orbita della luna attorno al pianeta coincidono collidono
     }
 
-
     // Controlla se un pianeta può collidere con una qualsiasi luna
     private static boolean collidonoPL(Pianeta p, Stella stella){
         boolean collidono = false;
         for (Pianeta pCiclo : stella.getPianeti()) {
-            for (Luna lCiclo : pCiclo.getLune()){
-                double dMaxl = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
-                double dMinl = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
-                if (p.getDistanza() <= dMaxl || p.getDistanza() >= dMinl) {
-                    collidono = true;
-                    break;
+            if (p != pCiclo) {
+                for (Luna lCiclo : pCiclo.getLune()) {
+                    double dMaxl = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
+                    double dMinl = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
+                    if (p.getDistanza() <= dMaxl && p.getDistanza() >= dMinl) {
+                        collidono = true;
+                        break;
+                    }
                 }
             }
         }
@@ -772,7 +779,7 @@ public class Main {
         double dMaxl = l.getPianeta().getDistanza() + l.getDistanza();
         double dMinl = l.getPianeta().getDistanza() - l.getDistanza();
         for (Pianeta pCiclo : stella.getPianeti()) {
-            if (pCiclo.getDistanza() <= dMaxl || pCiclo.getDistanza() >= dMinl) {
+            if ( (l.getPianeta() != pCiclo) && (pCiclo.getDistanza() <= dMaxl && pCiclo.getDistanza() >= dMinl)) {
                 collidono = true;
                 break;
             }
