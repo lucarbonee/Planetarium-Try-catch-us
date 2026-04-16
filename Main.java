@@ -8,8 +8,8 @@ public class Main {
     final static int MAX = 40;
     final static int MAX_PIANETI = 26000;
     final static int MAX_LUNE = 5000;
-    private static final ArrayList<Corpo> collisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
-
+    private static final ArrayList<Corpo> collisioni = new ArrayList<>();
+    private static ArrayList<CoppiaDiCollisione> CoppieDiCollisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
     public static void main(String[] args) {
 
@@ -258,8 +258,12 @@ public class Main {
                 System.out.println("\nPianeta '" + id + "' aggiunto con successo.");
                 System.out.println("Si trova sulla sua orbita a una distanza di: " + pianeta.getDistanza());
 
-                if (collidonoPP(pianeta, stella) || collidonoPL(pianeta, stella))
-                    collisioni.add(pianeta);
+                // Test collisioni
+                collidonoPP(pianeta, stella);
+                collidonoPL(pianeta, stella);
+
+//                if (collidonoPP(pianeta, stella) || collidonoPL(pianeta, stella))
+//                    collisioni.add(pianeta);
 
             } else {
                 System.out.println("\nQualcosa è andato storto !");
@@ -409,9 +413,15 @@ public class Main {
                     System.out.println("\nLuna '" + idLuna + "' aggiunta con successo attorno al pianeta '" + pianetaTrovato.getId() + "'!");
                     System.out.println("Distanza dal pianeta: " + nuovaLuna.getDistanza());
 
-                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) || collidonoLS(nuovaLuna) ) {
-                        collisioni.add(nuovaLuna);
-                    }
+
+                    // Test collisioni
+                    collidonoLL(nuovaLuna, stella);
+                    collidonoLP(nuovaLuna, stella);
+                    collidonoLS(nuovaLuna);
+
+//                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) || collidonoLS(nuovaLuna) ) {
+//                        collisioni.add(nuovaLuna);
+//                    }
 
                 } else {
                     System.out.println("\nQualcosa è andato storto nell'aggiunta di: " + nuovaLuna.getId() + ".");
