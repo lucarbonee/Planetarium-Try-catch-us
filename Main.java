@@ -54,7 +54,7 @@ public class Main {
         pulisciConsole(scanner);
 
         // Generatore di pianeti/lune per testare il programma
-        //generaCorpi(stella);
+        generaCorpi(stella);
 
         // Main loop
         stampaMenu();
@@ -576,6 +576,7 @@ public class Main {
         ArrayList<String> rotta = new ArrayList<>();
         ArrayList<String> rotta1 = new ArrayList<>();
         double distanza = 0;
+        boolean notFound = true;
         Corpo[] corpi = new Corpo[2];
         corpi[0] = new Corpo("a",1,1,1,1);
         corpi[1] = new Corpo("a",1,1,1,1);
@@ -591,38 +592,65 @@ public class Main {
         }
         else{
             if(((corpi[0].getGrado()==corpi[1].getGrado()) && corpi[0].getGrado()==3) && corpi[0].getInferiore()==corpi[1].getInferiore()){
+                notFound = false;
                 System.out.print("La rotta tra i due pianeti è: ");
-                System.out.println(corpi[0].getId() + " " +corpi[0].getInferiore().getId()+" "+corpi[1].getId());
+                System.out.println(corpi[0].getId() + " ---> " +corpi[0].getInferiore().getId()+ " ---> " +corpi[1].getId());
                 distanza = calcolaDistanza(corpi[0],corpi[0].getInferiore()) + calcolaDistanza(corpi[0].getInferiore(),corpi[1]);
             } else if (corpi[0]==corpi[1]) {
+                notFound = false;
                 System.out.print("La rotta tra i due pianeti è: ");
                 System.out.println(corpi[0].getId());
-            } else{
+            }
+            else if ((corpi[0].getGrado()==3 && corpi[1].getGrado()==2) && corpi[0].getInferiore().equals(corpi[1])){
+                notFound = false;
+                System.out.print("Ecco la rotta da seguire: ");
+                System.out.println(corpi[0].getId() + " ---> " + corpi[1].getId());
+                distanza = calcolaDistanza(corpi[0],corpi[1]);
+            } else if ((corpi[0].getGrado()==2 && corpi[1].getGrado()==3)) {
+                try {
+                    Pianeta p = (Pianeta) corpi[0];
+                    Luna l = (Luna) corpi[1];
+                    notFound = !p.possiedeLuna(l);
+                    if(!notFound){
+                        System.out.print("Ecco la rotta da seguire: ");
+                        System.out.println(corpi[0].getId() + " ---> " + corpi[1].getId());
+                        distanza = calcolaDistanza(corpi[0],corpi[1]);
+                    }
+                }
+                catch (Exception e){}
+            }
 
-                while(corpi[0]!=stella){
-                    rotta.add(corpi[0].getId());
-                    distanza += calcolaDistanza(corpi[0],corpi[0].getInferiore());
-                    corpi[0] = corpi[0].getInferiore();
+            if(notFound){
 
+                while(corpi[0]!=stella || corpi[1]!=stella){
+                    if(corpi[0]!=stella){
+                        rotta.add(corpi[0].getId());
+                        distanza += calcolaDistanza(corpi[0],corpi[0].getInferiore());
+                        corpi[0] = corpi[0].getInferiore();
+                    }
+                    if(corpi[1]!=stella){
+                        rotta1.add(corpi[1].getId());
+                        distanza += calcolaDistanza(corpi[1],corpi[1].getInferiore());
+                        corpi[1] = corpi[1].getInferiore();
+                    }
                 }
 
                 rotta.add(stella.getId());
-
-                while(corpi[1]!=stella){
-                    rotta1.add(corpi[1].getId());
-                    distanza += calcolaDistanza(corpi[1],corpi[1].getInferiore());
-                    corpi[1] = corpi[1].getInferiore();
-                }
-
                 Collections.reverse(rotta1);
-
                 rotta.addAll(rotta1);
-                System.out.print("La rotta tra i due pianeti è: ");
+
+                System.out.print("Ecco la rotta da seguire: ");
                 for(String s : rotta){
-                    System.out.print(s+"    ");
+                    if(rotta.getLast().equals(s)){
+                        System.out.print(s);
+                    }
+                    else{
+                        System.out.print(s+" ---> ");
+                    }
                 }
                 System.out.println();
             }
+
             System.out.println("La distanza totale della rotta corrisponde a: "+distanza);
         }
 

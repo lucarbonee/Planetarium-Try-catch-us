@@ -21,6 +21,8 @@ public class Pianeta extends Corpo{
         return this.lune.add(luna);
     }
 
+    public boolean possiedeLuna(Luna luna){return lune.contains(luna);}
+
     @Override
     public Corpo getInferiore() {
         return this.stella;
