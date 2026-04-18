@@ -8,7 +8,6 @@ public class Main {
     final static int MAX = 40;
     final static int MAX_PIANETI = 26000;
     final static int MAX_LUNE = 5000;
-    private static final ArrayList<Corpo> collisioni = new ArrayList<>();
     private static ArrayList<CoppiaDiCollisione> CoppieDiCollisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
     public static void main(String[] args) {
@@ -262,9 +261,6 @@ public class Main {
                 collidonoPP(pianeta, stella);
                 collidonoPL(pianeta, stella);
 
-//                if (collidonoPP(pianeta, stella) || collidonoPL(pianeta, stella))
-//                    collisioni.add(pianeta);
-
             } else {
                 System.out.println("\nQualcosa è andato storto !");
             }
@@ -413,15 +409,10 @@ public class Main {
                     System.out.println("\nLuna '" + idLuna + "' aggiunta con successo attorno al pianeta '" + pianetaTrovato.getId() + "'!");
                     System.out.println("Distanza dal pianeta: " + nuovaLuna.getDistanza());
 
-
                     // Test collisioni
                     collidonoLL(nuovaLuna, stella);
                     collidonoLP(nuovaLuna, stella);
-                    collidonoLS(nuovaLuna);
-
-//                    if (collidonoLL(nuovaLuna, stella) || collidonoLP(nuovaLuna, stella) || collidonoLS(nuovaLuna) ) {
-//                        collisioni.add(nuovaLuna);
-//                    }
+                    collidonoLS(nuovaLuna, stella);
 
                 } else {
                     System.out.println("\nQualcosa è andato storto nell'aggiunta di: " + nuovaLuna.getId() + ".");
@@ -485,7 +476,6 @@ public class Main {
                                     System.out.print(l.getId());
                                 }
                             }
-                            System.out.println();
                         } else {
                             System.out.println("Il pianeta non possiede alcuna luna che gli orbita attorno");
                         }
@@ -537,7 +527,12 @@ public class Main {
                         System.out.print("- ");
                         for(Luna l : p.getLune()){
                             if(p.getLune().size()>1){
-                                System.out.print(l.getId()+", ");
+                                if(p.getLune().getLast().equals(l)){
+                                    System.out.print(l.getId());
+                                }
+                                else{
+                                    System.out.print(l.getId()+", ");
+                                }
                             }
                             else{
                                 System.out.print(l.getId());
@@ -552,9 +547,9 @@ public class Main {
 
                 if(userInput.equals("si")){
                     stella.getPianeti().remove(c);
-                    collisioni.remove(c);
+                    CoppieDiCollisioni.removeIf(cdc -> cdc.contieneCorpo(c));
                     for (Luna lCiclo: p.getLune()){
-                        collisioni.remove(lCiclo);
+                        CoppieDiCollisioni.removeIf(cdc -> cdc.contieneCorpo(lCiclo));
                     }
 
                     System.out.println("Il pianeta '"+c.getId()+"' è stato rimosso con successo dal sistema stellare");
@@ -568,7 +563,7 @@ public class Main {
                 Luna l = (Luna) c; // Downcasting da corpo a luna
                 Pianeta p = l.getPianeta();
                 p.getLune().remove(l);
-                collisioni.remove(l);
+                CoppieDiCollisioni.removeIf(cdc -> cdc.contieneCorpo(l));
                 System.out.println("La luna '"+l.getId()+"' è stata rimossa con successo dal pianeta '"+p.getId()+"'");
             }
             else{
@@ -720,34 +715,6 @@ public class Main {
         return esiste;
     }
 
-    // Stampa le collisioni
-    public static void MostraCollisioni(Stella s){
-        for (Corpo c: collisioni){
-            System.out.println("\nIl corpo " + c.getId() + " è in rotta di collisione");
-        }
-        if (collisioni.isEmpty()){
-            if (s.getPianeti().isEmpty()){
-                System.out.println("\nIl tuo sistema è ancora vuoto, che collisioni vuoi che ci siano :(");
-            }else if (s.getPianeti().size() == 1){
-                System.out.println("\nNon ci sono collisioni, ma con solo un pianeta esistente ce la fanno tutti...");
-            }else {
-                System.out.println("\nNon ci sono collisioni possibili nel tuo sistema stellare, complimenti !!");
-            }
-        }
-    }
-
-    // Controlla se un pianeta può collidere con un altro qualsiasi pianeta
-    private static boolean collidonoPP (Pianeta p, Stella s) {
-        boolean collidono = false;
-        for (Pianeta pCiclo: s.getPianeti()){
-            if ( (p != pCiclo) && (p.getDistanza() == pCiclo.getDistanza()) ){ // Se i pianeti sono alla stessa distanza dalla stella (hanno la stessa orbita) collidono
-                collidono = true;
-                break;
-            }
-        }
-        return collidono;
-    }
-
     // Controlla se delle coordinate (passate sotto forma di vettore) sono libere
     private static boolean coordLibere(int[] c, Stella stella){
         boolean diverse = true;
@@ -768,9 +735,38 @@ public class Main {
         return diverse;
     }
 
+    // Stampa le collisioni
+    public static void MostraCollisioni(Stella s){
+        for (CoppiaDiCollisione cdc : CoppieDiCollisioni){
+            Corpo[] corpi = cdc.getCorpi();
+            System.out.println();
+            System.out.println("Il corpo "+corpi[0].getId()+" di coordinate: ("+corpi[0].getCoordX()+","+corpi[0].getCoordY()+")");
+            System.out.println("Collide con:");
+            System.out.println("Il corpo "+corpi[1].getId()+" di coordinate: ("+corpi[1].getCoordX()+","+corpi[1].getCoordY()+")");
+        }
+        if (CoppieDiCollisioni.isEmpty()){
+            if (s.getPianeti().isEmpty()){
+                System.out.println("\nIl sistema stellare è vuoto, non ci sono collisioni");
+            }else if (s.getPianeti().size() == 1){
+                System.out.println("\nNon ci sono collisioni, ma con solo un pianeta esistente ce la fanno tutti...");
+            }else {
+                System.out.println("\nNon ci sono collisioni possibili nel tuo sistema stellare, complimenti !!");
+            }
+        }
+    }
+
+    // Controlla se un pianeta può collidere con un altro qualsiasi pianeta
+    private static void collidonoPP(Pianeta p, Stella s) {
+        for (Pianeta pCiclo: s.getPianeti()){
+            if ( (p != pCiclo) && (p.getDistanza() == pCiclo.getDistanza()) ){ // Se i pianeti sono alla stessa distanza dalla stella (hanno la stessa orbita) collidono
+                CoppieDiCollisioni.add(new CoppiaDiCollisione(p,pCiclo));
+                break;
+            }
+        }
+    }
+
     // Controlla se una luna può collidere con un altra qualsiasi luna con orbita diversa
-    private static boolean collidonoLL (Luna l, Stella stella) {
-        boolean collidono = false;
+    private static void collidonoLL (Luna l, Stella stella) {
         double dMaxl1 = l.getPianeta().getDistanza() + l.getDistanza();
         double dMinl1 = l.getPianeta().getDistanza() - l.getDistanza();
 
@@ -780,49 +776,47 @@ public class Main {
                     double dMaxl2 = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
                     double dMinl2 = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
                     if ( (dMaxl1 >= dMinl2 && dMaxl1 <= dMaxl2) || (dMaxl2 >= dMinl1 && dMaxl2 <= dMaxl1)) {
-                        collidono = true;
+                        CoppieDiCollisioni.add(new CoppiaDiCollisione(l,lCiclo));
                         break;
                     }
                 }
             }
         }
-        return collidono;
     }
 
     // Controlla se la luna e una stella collidono
-    private static boolean collidonoLS(Luna l){
-        return l.getPianeta().getDistanza() == l.getDistanza(); // Se la distanza tra stella e pianeta e l'orbita della luna attorno al pianeta coincidono collidono
+    private static void collidonoLS(Luna l, Stella s){
+        if(l.getPianeta().getDistanza() == l.getDistanza()){ // Se la distanza tra stella e pianeta e l'orbita della luna attorno al pianeta coincidono collidono
+            CoppieDiCollisioni.add(new CoppiaDiCollisione(l,s));
+        }
     }
 
     // Controlla se un pianeta può collidere con una qualsiasi luna
-    private static boolean collidonoPL(Pianeta p, Stella stella){
-        boolean collidono = false;
+    private static void collidonoPL(Pianeta p, Stella stella){
         for (Pianeta pCiclo : stella.getPianeti()) {
             if (p != pCiclo) {
                 for (Luna lCiclo : pCiclo.getLune()) {
                     double dMaxl = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
                     double dMinl = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
                     if (p.getDistanza() <= dMaxl && p.getDistanza() >= dMinl) {
-                        collidono = true;
+                        CoppieDiCollisioni.add(new CoppiaDiCollisione(p,lCiclo));
                         break;
                     }
                 }
             }
         }
-        return collidono;
     }
 
-    private static boolean collidonoLP(Luna l, Stella stella){
-        boolean collidono = false;
+    // Data una luna la funzione trova tutti i pianeti con cui collide
+    private static void collidonoLP(Luna l, Stella stella){
         double dMaxl = l.getPianeta().getDistanza() + l.getDistanza();
         double dMinl = l.getPianeta().getDistanza() - l.getDistanza();
         for (Pianeta pCiclo : stella.getPianeti()) {
             if ( (l.getPianeta() != pCiclo) && (pCiclo.getDistanza() <= dMaxl && pCiclo.getDistanza() >= dMinl)) {
-                collidono = true;
+                CoppieDiCollisioni.add(new CoppiaDiCollisione(l,pCiclo));
                 break;
             }
         }
-        return collidono;
     }
 
 }
