@@ -8,7 +8,7 @@ public class Main {
     final static int MAX = 40;
     final static int MAX_PIANETI = 26000;
     final static int MAX_LUNE = 5000;
-    private static ArrayList<CoppiaDiCollisione> CoppieDiCollisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
+    private static final ArrayList<CoppiaDiCollisione> CoppieDiCollisioni = new ArrayList<>(); // contiene i corpi che possono potenzialmente collidere con altri.
 
     public static void main(String[] args) {
 
@@ -53,7 +53,7 @@ public class Main {
         pulisciConsole(scanner);
 
         // Generatore di pianeti/lune per testare il programma
-        generaCorpi(stella);
+        //generaCorpi(stella);
 
         // Main loop
         stampaMenu();
@@ -187,7 +187,7 @@ public class Main {
             System.out.println("Limite di " + MAX_PIANETI + " pianeti raggiunto !!");
             System.out.println("\nSe vuoi aggiungere altri pianeti elimina qualcuno degli esistenti");
         }
-        else{  // E' ancora possibile aggiungere un pianeta
+        else{  // È ancora possibile aggiungere un pianeta
             do {
                 nuovo = true;
                 while(id.isEmpty() || id.contains(" ") || id.contains("\t")){
@@ -760,7 +760,7 @@ public class Main {
         for (Pianeta pCiclo: s.getPianeti()){
             if ( (p != pCiclo) && (p.getDistanza() == pCiclo.getDistanza()) ){ // Se i pianeti sono alla stessa distanza dalla stella (hanno la stessa orbita) collidono
                 CoppieDiCollisioni.add(new CoppiaDiCollisione(p,pCiclo));
-                break;
+
             }
         }
     }
@@ -772,12 +772,12 @@ public class Main {
 
         for (Pianeta pCiclo : stella.getPianeti()) {
             for (Luna lCiclo : pCiclo.getLune()){
-                if (l != lCiclo){
+                if (l != lCiclo && l.getPianeta() != lCiclo.getPianeta()){
                     double dMaxl2 = lCiclo.getPianeta().getDistanza() + lCiclo.getDistanza();
                     double dMinl2 = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
                     if ( (dMaxl1 >= dMinl2 && dMaxl1 <= dMaxl2) || (dMaxl2 >= dMinl1 && dMaxl2 <= dMaxl1)) {
                         CoppieDiCollisioni.add(new CoppiaDiCollisione(l,lCiclo));
-                        break;
+
                     }
                 }
             }
@@ -800,7 +800,7 @@ public class Main {
                     double dMinl = lCiclo.getPianeta().getDistanza() - lCiclo.getDistanza();
                     if (p.getDistanza() <= dMaxl && p.getDistanza() >= dMinl) {
                         CoppieDiCollisioni.add(new CoppiaDiCollisione(p,lCiclo));
-                        break;
+
                     }
                 }
             }
@@ -814,7 +814,7 @@ public class Main {
         for (Pianeta pCiclo : stella.getPianeti()) {
             if ( (l.getPianeta() != pCiclo) && (pCiclo.getDistanza() <= dMaxl && pCiclo.getDistanza() >= dMinl)) {
                 CoppieDiCollisioni.add(new CoppiaDiCollisione(l,pCiclo));
-                break;
+
             }
         }
     }
