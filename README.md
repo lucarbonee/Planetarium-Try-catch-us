@@ -30,7 +30,8 @@ Precedentemente, nella sezione "Costituzione del sistema stellare", è stato spe
 - Collisione Luna-Pianeta
 - Collisione Luna-Stella
 
-Il nostro programma, a richiesta dell'utente, fornisce la lista di pianeti e lune che venendo aggiunti possono generare delle collisioni.
+Il nostro programma, a richiesta dell'utente, fornisce la lista di pianeti e lune che generano delle collisioni.
+I corpi in collisione vengono visualizzati a coppie.
 
 ## 2) Funzionamento del programma
 
@@ -38,7 +39,7 @@ Il nostro programma, a richiesta dell'utente, fornisce la lista di pianeti e lun
 Il programma all'avvio stampa a video un messaggio di benvenuto e fa creare automaticamente all'utente una stella. In seguito, dopo essere entrato nel ciclo di esecuzione principale, stampa il menù comandi permettendo all' utente di comprendere come modificare il sistema stellare e come orientarsi all'interno del programma.
 
 ### 2.2) Navigazione nei menù
-La posizione dell'utente viene indicata tra le due tilde accanto al cursore 
-- ~ home ~: indica che tri trovi nel menù principale da dove puoi entrare nelle sottosezioni digitando gli appositi comandi descritti nel menù
+La posizione dell'utente viene indicata tra le due tilde accanto al cursore (solamente nel caso di aggiunta o rimozione di un corpo perchè abbiamo notato che la sezione potrebbe essere confusionaria)
+- ~ home ~: indica che tri trovi nel menù principale da dove puoi entrare nella sezione di ricerca, aggiunta/rimozione di un corpo oppure effettuare diverse richieste al software.
 - ~ + ~: indica che ti trovi nel menù aggiunta corpo
 - ~ - ~: indica che ti trovi nel menù rimozione corpo

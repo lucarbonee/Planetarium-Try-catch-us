@@ -182,7 +182,6 @@ public class Main {
         int massa = 0, coordX = 0, coordY= 0;
         String id="";
 
-
         if(stella.getPianeti().size()>=MAX_PIANETI){ // Raggiunto limite max pianeti
             System.out.println("Limite di " + MAX_PIANETI + " pianeti raggiunto !!");
             System.out.println("\nSe vuoi aggiungere altri pianeti elimina qualcuno degli esistenti");
